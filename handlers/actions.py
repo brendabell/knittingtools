@@ -21,6 +21,8 @@ def pcgenerator_get(handler):
 			
 	except Exception:
 		exc_type, exc_value, exc_traceback = sys.exc_info()
+		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
+
 		handler.wfile.write(
 			"<h1>Aw, snap! We seem to have a problem.</h1><p><b>")
 		handler.wfile.write(
@@ -30,7 +32,6 @@ def pcgenerator_get(handler):
 			"<a href='http://www.ravelry.com/people/beebell'>beebell on Ravelry</a>. "
 			"It will be helpful if you include the pattern you uploaded to help me "
 			"diagnose the issue.")
-		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
 
 	finally:
 		f.close()
@@ -70,15 +71,20 @@ def pcgenerator_post(handler):
 			return
 
 	except ValueError as e:
+		exc_type, exc_value, exc_traceback = sys.exc_info()
+		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
+
 		handler.send_response(302)
 		handler.send_header('Content-type', 'text/html')
 		handler.end_headers()
 		handler.wfile.write(
-			"<h1>Aw, snap!</h1><p>")
+			"<h1>Aw, snap! We seem to have a problem.</h1><p><b>")
 		handler.wfile.write(e)
 
 	except Exception:
 		exc_type, exc_value, exc_traceback = sys.exc_info()
+		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
+
 		handler.send_response(302)
 		handler.send_header('Content-type', 'text/html')
 		handler.end_headers()
@@ -91,7 +97,6 @@ def pcgenerator_post(handler):
 			"<a href='http://www.ravelry.com/people/beebell'>beebell on Ravelry</a>. "
 			"It will be helpful if you include the pattern you uploaded to help me "
 			"diagnose the issue.")
-		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
 
 def calculator_get(handler):
 
@@ -109,6 +114,8 @@ def calculator_get(handler):
 			
 	except Exception:
 		exc_type, exc_value, exc_traceback = sys.exc_info()
+		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
+
 		handler.wfile.write(
 			"<h1>Aw, snap! We seem to have a problem.</h1><p><b>")
 		handler.wfile.write(
@@ -118,7 +125,6 @@ def calculator_get(handler):
 			"<a href='http://www.ravelry.com/people/beebell'>beebell on Ravelry</a>. "
 			"It will be helpful if you include the pattern you uploaded to help me "
 			"diagnose the issue.")
-		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
 
 	finally:
 		f.close()
@@ -138,6 +144,8 @@ def index_get(handler):
 			
 	except Exception:
 		exc_type, exc_value, exc_traceback = sys.exc_info()
+		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
+
 		handler.wfile.write(
 			"<h1>Aw, snap! We seem to have a problem.</h1><p><b>")
 		handler.wfile.write(
@@ -147,7 +155,6 @@ def index_get(handler):
 			"<a href='http://www.ravelry.com/people/beebell'>beebell on Ravelry</a>. "
 			"It will be helpful if you include the pattern you uploaded to help me "
 			"diagnose the issue.")
-		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
 
 	finally:
 		f.close()
