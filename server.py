@@ -23,7 +23,8 @@ template_map = {
 	'/pcgenerator/': pcgenerator_actions,
 	'/calculator': calculator_actions,
 	'/calculator/': calculator_actions,
-	'/': index_actions,
+	'/knittingtools': index_actions,
+	'/knittingtools/': index_actions,
 	'/index': index_actions }
 
 
