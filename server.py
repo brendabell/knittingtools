@@ -1,5 +1,6 @@
 import logging
 import logging.config
+import os
 import sys
 import traceback
 
@@ -33,7 +34,7 @@ template_map = {
 	'/index/': index_actions,
 	'/': index_actions}
 
-logging.config.fileConfig('logging.conf')
+logging.config.fileConfig("{0}/{1}".format(os.path.dirname(os.path.realpath(__file__)), 'logging.conf'))
 
 logger = logging.getLogger('root')
 
@@ -83,7 +84,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
 	def log_request(self, code=None, size=None):
 		logger.info("%s - - [%s] %s %s %s" % (
-			self.address_string(),
+			self.headers.get('X-Forwarded-For', None) or self.address_string(),
 			self.log_date_time_string(),
 			self.requestline,
 			code or '-',
@@ -94,7 +95,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
 	def log_message(self, format, *args):
 		logger.info("%s - - [%s] %s\n" % (
-			self.address_string(),
+			self.headers.get('X-Forwarded-For', None) or self.address_string(),
 			self.log_date_time_string(),
 			format%args))
 
