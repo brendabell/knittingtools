@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# chkconfig: 2345 75 35
+# description: knittingtools
+
+SERVICE=knittingtools
+
+# Source function library.
+. /etc/init.d/functions
+
+lockfile=/var/lock/${SERVICE}.lock
+procname=/path/to/knittingtools/venv/bin/python
+scriptname=/path/to/knittingtools/server.py
+logfilename=/var/log/knittingtools.log
+errfilename=/var/log/knittingtools.err
+PID_FILE=/var/run/${SERVICE}.pid
+
+RETVAL=0
+prog="knittingtools"
+
+start () {
+    if [ -f "$PID_FILE" ]; then
+        checkpid `cat $PID_FILE` && return 0
+    fi
+    echo -n $"Starting $prog: "
+    $procname $scriptname 1>>$logfilename 2>>$errfilename &
+    RETVAL=$?
+    PID=$!
+    echo $PID
+    echo $PID >$PID_FILE
+    echo
+    [ $RETVAL -eq 0 ] && touch $lockfile
+    return $RETVAL
+}
+
+stop () {
+    RETVAL=0
+    if [ -f "${PID_FILE}" ]; then
+        echo -n $"Stopping $prog: "
+        killproc -p ${PID_FILE} $procname
+        RETVAL=$?
+        echo
+    fi
+    [ $RETVAL -eq 0 ] && rm -f $lockfile
+    return $RETVAL
+}
+
+restart () {
+    stop
+    start
+}
+
+# See how we were called.
+case "$1" in
+    start|stop|restart)
+        $1 ;;
+    status)
+        status -p ${PID_FILE} $procname ;;
+    condrestart)
+        test ! -f $lockfile || restart ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart|condrestart}"
+        exit 2
+esac

@@ -1,5 +1,5 @@
 import cgi
-from os import curdir
+import os
 import sys
 import traceback
 
@@ -7,8 +7,8 @@ from modules.pcgenerator import PCGenerator
 
 def pcgenerator_get(handler):
 
-	f = open("{}/templates/{}".format(
-		curdir,
+	f = open("{}/../templates/{}".format(
+		os.path.dirname(os.path.realpath(__file__)),
 		"pcgenerator.html"))
 
 	try:
@@ -95,8 +95,8 @@ def pcgenerator_post(handler):
 
 def calculator_get(handler):
 
-	f = open("{}/templates/{}".format(
-		curdir,
+	f = open("{}/../templates/{}".format(
+		os.path.dirname(os.path.realpath(__file__)),
 		"calculator.html"))
 
 	try:
@@ -124,9 +124,9 @@ def calculator_get(handler):
 		f.close()
 
 def index_get(handler):
-	f = open("{}/templates/{}".format(
-	curdir,
-	"index.html"))
+	f = open("{}/../templates/{}".format(
+		os.path.dirname(os.path.realpath(__file__)),
+		"index.html"))
 
 	try:
 		handler.send_response(200)
