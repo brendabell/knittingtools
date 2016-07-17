@@ -54,7 +54,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
 def main():
 	try:
-		server = HTTPServer(('', 8080), MyHandler)
+		server = HTTPServer(('', 8088), MyHandler)
 		print 'started httpserver...'
 		server.serve_forever()
 	except KeyboardInterrupt:
