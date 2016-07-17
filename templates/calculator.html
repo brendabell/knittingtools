@@ -1,0 +1,204 @@
+<!DOCTYPE HTML SYSTEM>
+<html>
+	<head>
+		<title>Knitting Gauge Calculator</title>
+		<style>
+			body {
+				font-family: arial, sans-serif;
+				margin-top: 40px;
+				margin-left: 10%;
+				width: 80%;
+				background-color: #eeeeee;
+			}
+			table {
+				border-collapse: collapse;
+				margin-left: 40px;
+			}
+
+			td, th {
+				border: 1px solid #cccccc;
+				text-align: center;
+				padding: 8px;
+			}
+			.boxed {
+				border: 1px solid gray;
+			}
+		</style>
+	</head>
+
+	<body>
+		<h1>Knitting Gauge Calculator</h1>
+		<a href="/">&lt;Back&gt;</a>
+		<hr>
+
+		<p>This app will help you calculate stitches and rows when your gauge differs from the gauge specified on the pattern.
+		<p>The forms are reactive. I.e., when you enter a value in any field, the other fields will automatically be adjusted for the value you entered. For example, if you enter inches in the "Imperial" column, the equivalent value in centimeters will automatically displayed in the "Metric" column.
+
+		<hr>
+
+		<p>
+		<b>How do I convert from centimeters to/from inches, meters to/from yards or grams to/from ounces?</b>
+		<p>
+		<form>
+			<table class="boxed">
+				<tr style="background-color:darkgray">
+					<th style="width:400px">Conversion</th>
+					<th style="width:150px">Metric</th>
+					<th style-"width:150px">Imperial</th>
+				</tr>
+				<tr>
+					<td>Centimeters &amp; Inches</td>
+					<td><input type="number" id="cm" oninput="inch.value = Math.round(cm.value * 0.393701 * 1000) / 1000;"><sup> a</sup></td>
+					<td><input type="number" id="inch" oninput="cm.value = Math.round(inch.value * 2.54 * 1000) / 1000;"><sup> b</sup></td>
+				</tr>
+				<tr>
+					<td>Meters &amp; Yards</td>
+					<td><input type="number" id="m" oninput="yd.value = Math.round(m.value * 1.093613 * 1000) / 1000;"><sup> c</sup></td>
+					<td><input type="number" id="yd" oninput="m.value = Math.round(yd.value * 0.9144 * 1000) / 1000;"><sup> d</sup></td>
+				</tr>
+				<tr>
+					<td>Grams &amp; Ounces</td>
+					<td><input type="number" id="gm" oninput="oz.value = Math.round(gm.value * 0.035274 * 1000) / 1000;"><sup> e</sup></td>
+					<td><input type="number" id="oz" oninput="gm.value = Math.round(oz.value * 28.349523 * 1000) / 1000;"><sup> f</sup></td>
+				</tr>
+			</table>
+		</form>
+		<p><b>How it's done:</b>
+		<p style="margin-left: 40px;">a = b * 2.54
+		<br>b = a * 0.393701
+		<br>c = d * 0.9144
+		<br>d = c * 1.093613
+		<br>e = f * 28.349523
+		<br>f = e * 0.035274
+
+		<hr>
+
+		<p>
+		<b>My pattern is written for one gauge, but I get a different gauge (rows or stitches) on my knitting machine. How do I calculate the number of stitches to cast on or the number of rows to knit to achieve the desired size?</b>
+		<p>
+		<form>
+
+			<table class="boxed">
+				<tr style="background-color:darkgray">
+					<th style="width:400px">Description</th>
+					<th style="width:150px">Value</th>
+				<tr>
+					<td>Rows/stitches per 10cm/4" on the pattern<sup> a</sup></td>
+					<td><input
+						type="number"
+						id="a"
+						min="1.0"
+						max="100.0"
+						step="0.1"
+						value="1.0"
+						oninput="d.value = Math.round((b.value / a.value) * c.value)"></td>
+				</tr>
+				<tr>
+					<td>Pattern rows/stitches<sup> b</sup></td>
+					<td><input
+						type="number"
+						id="b"
+						min="1.0"
+						max="100.0"
+						step="0.1"
+						value="1.0"
+						oninput="d.value = Math.round((b.value / a.value) * c.value)"></td>
+				</tr>
+				<tr>
+					<td>Rows/stitches per 10cm/4" on your knitting machine<sup> c</sup></td>
+					<td><input
+						type="number"
+						id="c"
+						min="1.0"
+						max="100.0"
+						step="0.1"
+						value="1.0"
+						oninput="d.value = Math.round((b.value / a.value) * c.value)"></td>
+				</tr>
+				<tr>
+					<td>Equivalent rows/stitches on your knitting machine<sup> d</sup></td>
+					<td><output
+						name="d"
+						for="a b c"
+						value="1">
+					</output></td>
+				</tr>
+			</table>
+		</form>
+		<p><b>How it's done:</b>
+		<p style="margin-left: 40px">d = (b / a) * c
+		<hr>
+		<p>
+		<b>How do I calculate the number of stitches to cast on or the number of rows to knit to achieve the desired width or length?</b>
+		<p>
+		<form>
+
+			<table class="boxed">
+				<tr style="background-color:darkgray">
+					<th style="width:400px">Description</th>
+					<th style="width:150px">Metric (cm)</th>
+					<th style="width:150px">Imperial (in)</th>
+				</tr>
+				<tr>
+					<td>Rows/stitches per 10cm/4"<sup> a</sup></td>
+					<td colspan="2"><input
+						type="number"
+						id="a"
+						name="gauge"
+						min="1.0"
+						max="100.0"
+						step="0.1"
+						value="1.0"
+						oninput="c1.value = Math.round(a.value / 10 * b1.value); c2.value = Math.round(a.value / 4 * b1.value);"></td>
+				</tr>
+				<tr>
+					<td>desired width/length<sup> b</sup></td>
+					<td><input
+						type="number"
+						id="b1"
+						name="target_size"
+						min="1.0"
+						max="100.0"
+						step="0.1"
+						value="1.0"
+						oninput="b2.value = Math.round(b1.value * 0.393701 * 1000) / 1000; c1.value = Math.round(a.value / 10 * b1.value); c2.value = Math.round(a.value / 4 * b2.value);"></td>
+					<td><input
+						type="number"
+						id="b2"
+						name="target_size"
+						min="1.0"
+						max="100.0"
+						step="0.1"
+						value="1.0"
+						oninput="b1.value= Math.round(b2.value * 2.54 * 1000) / 1000; c1.value = Math.round(a.value / 10 * b1.value); c2.value = Math.round(a.value / 4 * b2.value);"></td>
+				</tr>
+				<tr>
+					<td># stitches to cast on or rows to knit<sup> c</sup></td>
+					<td><output
+						name="c1"
+						for="a b1"
+						value="1">
+					</output></td>
+					<td><output
+						name="c2"
+						for="a b2"
+						value="1">
+					</output></td>
+				</tr>
+			</table>
+		</form>
+
+		<p><b>How it's done:</b>
+		<p style="margin-left: 40px">c = (a / 10) * b (in centimeters)
+		<br>c = (a / 4) * b (in inches)
+
+		<hr>
+
+		<p><b>Quick Tips:</b>
+		<p>After you compute the number of stitches or rows required for your gauge, consult the pattern to see if knitting a different size will produce the desired results.
+		<p style="margin-left: 40px">For example, if the pattern instructs you to cast on 80 stitches for a size medium but your gauge requires you to cast on 90 stitches to achieve the same width, look at the pattern to see if the next larger size specifies a cast on that's closer to 90 stitches. Knitting a larger size at a smaller gauge (or smaller size at a larger gauge) may produce the same result.
+
+		<p>If you have questions or feedback, please contact <a href="http://www.ravelry.com/people/beebell">beebell on Ravelry</a> via private message.</p>
+
+	</body>
+</html>

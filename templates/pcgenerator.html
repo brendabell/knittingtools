@@ -1,0 +1,137 @@
+<!DOCTYPE HTML SYSTEM>
+<html>
+	<head>
+		<title>PCGenerator</title>
+		<style>
+			body {
+				font-family: arial, sans-serif;
+				margin-top: 40px;
+				margin-left: 10%;
+				width: 80%;
+				background-color: #eeeeee;
+			}
+			table {
+				border-collapse: collapse;
+			}
+
+			td, th {
+				border: None;
+				text-align: left;
+				padding: 8px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<h1>Punchcard Generator</h1>
+		<a href="/">&lt;Back&gt;</a>
+		<hr>
+
+		<p>This app will allow you to upload a small text file that contains your pattern represented as a sequence of rows with X's for punched holes and any other character except space for unpunched holes. The program will generate an SVG file that can be imported into the software you use to cut material with your die cutter.
+
+		<h2>TL;DR</h2>
+		<ul>
+			<li>Select the file to upload.</li>
+			<li>Enter your punchcard row height and column width in millimeters.</li>
+			<li>Enter horizontal and vertical repeats if you need them.</li>
+			<li>Click the Upload button.</li>
+		</ul>In a few seconds, you should see a dialog prompting you for where you want to save your file. If you need more detailed instructions, keep reading below.
+
+		<p>
+		<form
+			id="main"
+			method="POST"
+			enctype="multipart/form-data"
+			action="/pcgenerator"
+			onfocus="x.value=horz.value; y.value=vert.value"
+			oninput="x.value=horz.value; y.value=vert.value">
+
+			<table>
+				<tr>
+					<td style="text-align:right">Select file to upload:<br>&nbsp;</td>
+					<td colspan="2"><input type="file" name="upfile"><br><small>(maximum file size 2500 characters)<small></td>
+				</tr>
+				<tr>
+					<td style="text-align:right">Height of 1 punchcard row (mm):</td>
+					<td colspan="2"><input type="number" name="rowheight" min="1.0" max="10.0" step="0.1" value="5.0"></td>
+				</tr>
+				<tr>
+					<td style="text-align:right">Width of 1 punchcard column (mm):</td>
+					<td colspan="2"><input type="number" name="colwidth" min="1.0" max="10.0" step="0.1" value="4.5"></td>
+				</tr>
+				<tr>
+					<td style="text-align:right"># Horizontal repeats (up to 12):</td>
+					<td colspan="2"><input type="range" id="horz" name="horz" min="1" max="12" step="1" value="1">
+						<output id="x" name="x" value="1"></output>
+						<script>x.value=horz.value;</script></td>
+				</tr>
+				<tr>
+					<td style="text-align:right"># Vertical repeats (up to 12):</td>
+					<td><input type="range" id="vert" name="vert" min="1" max="12" step="1" value="1">
+						<output id="y" name="y" value="1"></output>
+						<script>y.value=vert.value;</script></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td colspan="2"><input type="submit" value="Upload"></td>
+				</tr>
+			</table>
+
+			<br>
+			
+			<br>
+		</form>
+
+		<hr>
+
+		<h1>Instructions</h1>
+
+		<p>Both upper and lower case X's are supported. The total width in stitches is determined by the number of characters in the first row. For example, the following text file has 4 rows and 12 stitches:
+
+		<pre>
+	x-----x-----
+	-x-----x----
+	--x-----x---
+	---x-----x--
+		</pre>
+
+		<p>By default, the generator will do 1 horizontal repeat and 1 vertical repeat. I.e., if your file contains 36 rows with 24 characters per row, the generated file will produce a 24 row x 36 stitch card. You can increase the width and/or length by adjusting the horizontal and/or vertical repeat before clicking the upload button.
+
+		<p>What this means is that you can design a simple 4x4 card and use repeats to make the card as wide or as long as it needs to be in order to work properly. For example, the following text file will generate a 24 row x 48 stitch card if you specify 6 for the horizontal repeat and 12 for the vertical repeat:
+
+		<pre>
+	x-x-
+	-x-x
+	x-x-
+	-x-x
+		</pre>
+
+		<p>You'll need to specify the height and width of 1 row and 1 column on the punchcard. You can determine the correct values by measuring the size of the squares on a card that works with your knitting machine. If your card doesn't have squares, you can measure the distance between the centers of two adjacent holes. For reference:
+
+		<p>
+		<table>
+			<tr>
+				<th>Knitting Machine</th>
+				<th style="text-align:center">Row Height<br>(mm)</th>
+				<th style="text-align:center">Column Width<br>(mm)</th>
+			</tr>
+			<tr>
+				<td>Brother 24-Stitch Standard</td>
+				<td style="text-align:center">5</td>
+				<td style="text-align:center">4.5</td>
+			</tr>
+			<tr>
+				<td>Brother 12-Stitch Bulky</td>
+				<td style="text-align:center">5</td>
+				<td style="text-align:center">9</td>
+			</tr>
+		</table>
+
+		<p>The resulting SVG file can be imported into any application that understands SVG. You can also display the SVG in some browsers. Neither the text file or resulting SVG will be saved on this site. Be sure to keep them in a safe location so they don't get lost.
+
+		<p>This program has only been tested using Sure Cuts A Lot on a Pazzles Creative Mighty. YMMV!
+
+		<p>If you have questions or feedback, please contact <a href="http://www.ravelry.com/people/beebell">beebell on Ravelry</a> via private message.</p>
+
+	</body>
+</html>
