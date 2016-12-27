@@ -1,5 +1,5 @@
 import cgi
-from os import curdir
+import os
 import sys
 import traceback
 
@@ -7,8 +7,8 @@ from modules.pcgenerator import PCGenerator
 
 def pcgenerator_get(handler):
 
-	f = open("{}/templates/{}".format(
-		curdir,
+	f = open("{}/../templates/{}".format(
+		os.path.dirname(os.path.realpath(__file__)),
 		"pcgenerator.html"))
 
 	try:
@@ -21,6 +21,8 @@ def pcgenerator_get(handler):
 			
 	except Exception:
 		exc_type, exc_value, exc_traceback = sys.exc_info()
+		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
+
 		handler.wfile.write(
 			"<h1>Aw, snap! We seem to have a problem.</h1><p><b>")
 		handler.wfile.write(
@@ -30,7 +32,6 @@ def pcgenerator_get(handler):
 			"<a href='http://www.ravelry.com/people/beebell'>beebell on Ravelry</a>. "
 			"It will be helpful if you include the pattern you uploaded to help me "
 			"diagnose the issue.")
-		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
 
 	finally:
 		f.close()
@@ -43,21 +44,19 @@ def pcgenerator_post(handler):
 			query=cgi.parse_multipart(handler.rfile, pdict)
 
 		upfilecontent = query.get('upfile')
-		if len(upfilecontent[0]) > 2500:
+		if len(upfilecontent[0]) > 4000:
 			handler.send_response(302)
 			handler.send_header('Content-type', 'text/html')
 			handler.end_headers()
 			handler.wfile.write("Sorry. Your file cannot exceed 2500 bytes!")
 		else:
-			horz_repeat = query.get('horz')
+			machine_type = query.get('machine')
 			vert_repeat = query.get('vert')
-			cell_height = query.get('rowheight')
-			cell_width = query.get('colwidth')
+
 			generator = PCGenerator(
+				handler,
 				upfilecontent[0],
-				float(cell_height[0]),
-				float(cell_width[0]),
-				int(horz_repeat[0]),
+				machine_type[0],
 				int(vert_repeat[0]))
 			result = generator.generate()
 
@@ -70,15 +69,27 @@ def pcgenerator_post(handler):
 			return
 
 	except ValueError as e:
+		exc_type, exc_value, exc_traceback = sys.exc_info()
+		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
+
 		handler.send_response(302)
 		handler.send_header('Content-type', 'text/html')
 		handler.end_headers()
 		handler.wfile.write(
-			"<h1>Aw, snap!</h1><p>")
+			"<h1>Aw, snap! We seem to have a problem.</h1><p><b>")
+		handler.wfile.write(
+			repr(traceback.format_exception(exc_type, exc_value,exc_traceback)))
 		handler.wfile.write(e)
+		handler.wfile.write(
+			"</b><p>Please report this error via private message to "
+			"<a href='http://www.ravelry.com/people/beebell'>beebell on Ravelry</a>. "
+			"It will be helpful if you include the pattern you uploaded to help me "
+			"diagnose the issue.")
 
 	except Exception:
 		exc_type, exc_value, exc_traceback = sys.exc_info()
+		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
+
 		handler.send_response(302)
 		handler.send_header('Content-type', 'text/html')
 		handler.end_headers()
@@ -91,12 +102,11 @@ def pcgenerator_post(handler):
 			"<a href='http://www.ravelry.com/people/beebell'>beebell on Ravelry</a>. "
 			"It will be helpful if you include the pattern you uploaded to help me "
 			"diagnose the issue.")
-		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
 
 def calculator_get(handler):
 
-	f = open("{}/templates/{}".format(
-		curdir,
+	f = open("{}/../templates/{}".format(
+		os.path.dirname(os.path.realpath(__file__)),
 		"calculator.html"))
 
 	try:
@@ -109,6 +119,8 @@ def calculator_get(handler):
 			
 	except Exception:
 		exc_type, exc_value, exc_traceback = sys.exc_info()
+		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
+
 		handler.wfile.write(
 			"<h1>Aw, snap! We seem to have a problem.</h1><p><b>")
 		handler.wfile.write(
@@ -118,15 +130,14 @@ def calculator_get(handler):
 			"<a href='http://www.ravelry.com/people/beebell'>beebell on Ravelry</a>. "
 			"It will be helpful if you include the pattern you uploaded to help me "
 			"diagnose the issue.")
-		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
 
 	finally:
 		f.close()
 
 def index_get(handler):
-	f = open("{}/templates/{}".format(
-	curdir,
-	"index.html"))
+	f = open("{}/../templates/{}".format(
+		os.path.dirname(os.path.realpath(__file__)),
+		"index.html"))
 
 	try:
 		handler.send_response(200)
@@ -138,6 +149,8 @@ def index_get(handler):
 			
 	except Exception:
 		exc_type, exc_value, exc_traceback = sys.exc_info()
+		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
+
 		handler.wfile.write(
 			"<h1>Aw, snap! We seem to have a problem.</h1><p><b>")
 		handler.wfile.write(
@@ -147,7 +160,6 @@ def index_get(handler):
 			"<a href='http://www.ravelry.com/people/beebell'>beebell on Ravelry</a>. "
 			"It will be helpful if you include the pattern you uploaded to help me "
 			"diagnose the issue.")
-		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
 
 	finally:
 		f.close()

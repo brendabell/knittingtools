@@ -1,70 +1,130 @@
 import svgwrite
 
-# default values
 
-# number of overlapping blank rows at the top of the card
-blank_rows = 2
+# machine specs
+specs = {
+	'12-stitch-br-sr': {
+		'card_width': 142,
+		'blank_rows': 2,
+		'row_height': 5.0,
+		'stitch_width': 9.0,
+		'pattern_hole_radius': 3.5,
+		'pattern_hole_xoffset': 22.5,
+		'clip_hole_radius': 3.5,
+		'clip_hole_xoffset': 5.0,
+		'clip_hole_yoffset': 5.0,
+		'tractor_hole_radius': 3.0,
+		'tractor_hole_xoffset': 12.5,
+		'tractor_hole_yoffset': 2.5,
+		'stitches': 12,
+		'corner_offset': 2,
+	},
+	'24-stitch-br-sr': {
+		'card_width': 142,
+		'blank_rows': 2,
+		'row_height': 5.0,
+		'stitch_width': 4.5,
+		'pattern_hole_radius': 3.5,
+		'pattern_hole_xoffset': 17.5,
+		'clip_hole_radius': 3.5,
+		'clip_hole_xoffset': 5.0,
+		'clip_hole_yoffset': 5.0,
+		'tractor_hole_radius': 3.0,
+		'tractor_hole_xoffset': 12.0,
+		'tractor_hole_yoffset': 2.5,
+		'stitches': 24,
+		'corner_offset': 2,
+	},
+	'40-stitch-deco': {
+		'card_width': 242,
+		'blank_rows': 3,
+		'row_height': (305.0 / 58.0),
+		'stitch_width': 5.0,
+		'pattern_hole_radius': 3.0,
+		'pattern_hole_xoffset': 22.0,
+		'clip_hole_radius': 3.0,
+		'clip_hole_xoffset': 2.0,
+		'clip_hole_yoffset': 5.5,
+		'tractor_hole_radius': 2.5,
+		'tractor_hole_xoffset': 12.5,
+		'tractor_hole_yoffset': 5.5,
+		'stitches': 40,
+		'corner_offset': 0,
+	},
+}
 
-# width of the side margin in mm
-side_margin = 17.0
 
-# height of one row on the card in mm
-row_height = 5.0
+class Layout:
 
-# width of one stitch on the card in mm
-stitch_width = 4.5
-#stitch_width = 9.0
+	def __init__(self, machine_id, stitches, rows, horz_repeat, vert_repeat):
 
-# radius of a pattern hole in mm
-pattern_hole_radius = 3.5
+		# total width of the cut card
+		self.card_width = specs[machine_id]['card_width']
 
-# radius of a clip hole in mm
-clip_hole_radius = 3.0
+		# number of overlapping blank rows at the top of the card
+		self.blank_rows = specs[machine_id]['blank_rows']
 
-# radius of a sprocket hole in mm
-sprocket_hole_radius = 3.5
+		# height of one row on the card in mm
+		self.row_height = specs[machine_id]['row_height']
 
-# drawing stroke width
-stroke_width='.1'
+		# width of one stitch on the card in mm
+		self.stitch_width = specs[machine_id]['stitch_width']
 
-# fill color
-fill_color = 'white'
+		# radius of a pattern hole in mm
+		self.pattern_hole_radius = specs[machine_id]['pattern_hole_radius']
 
-# stroke_color
-stroke_color = 'black'
+		# offset of the first pattern hole from the left edge of the card in mm
+		self.pattern_hole_xoffset = specs[machine_id]['pattern_hole_xoffset']
 
-card_width = 0
-card_height = 0
-card_rows = 0
-card_stitches = 0
+		# radius of a clip hole in mm
+		self.clip_hole_radius = specs[machine_id]['clip_hole_radius']
 
-class PCGenerator:
+		# offset of a clip hole from the left/right edge of the card in mm
+		self.clip_hole_xoffset = specs[machine_id]['clip_hole_xoffset']
 
-	def __init__(self, data, cell_height, cell_width, horz_repeat, vert_repeat):
-		global row_height
-		global stitch_width
+		# offset of a clip hole from the top/bottom edges of the card in mm
+		self.clip_hole_yoffset = specs[machine_id]['clip_hole_yoffset']
 
-		self.data = data.split()
-		self.horz_repeat = horz_repeat
-		self.vert_repeat = vert_repeat
-		row_height = cell_height
-		stitch_width = cell_width
+		# radius of a tractor hole in mm
+		self.tractor_hole_radius = specs[machine_id]['tractor_hole_radius']
 
-	def generate(self):
-		global card_rows
-		global card_stitches
-		global card_width
-		global card_height
+		# offset of a tractor hole from the left/right edge of the card in mm
+		self.tractor_hole_xoffset = specs[machine_id]['tractor_hole_xoffset']
 
-		card_rows = len(self.data)
-		card_stitches = len(self.data[0])
-		if card_rows > 200 or card_stitches > 30:
+		# offset of a tractor hole from the top/bottom edge of the card in mm
+		self.tractor_hole_yoffset = specs[machine_id]['tractor_hole_yoffset']
+
+		self.corner_offset = specs[machine_id]['corner_offset']
+
+		self.card_stitches = stitches
+		self.card_rows = rows
+
+		if self.card_rows > 200 or self.card_stitches > 30:
 			raise ValueError(
 				"Your pattern seems to exceed 200 rows and/or 30 stitches. "
 				"Are you sure you uploaded the right text file?")
 
-		card_width = (side_margin * 2) + (card_stitches * self.horz_repeat * stitch_width)
-		card_height = ((blank_rows * 2) + (card_rows * self.vert_repeat)) * row_height
+		self.horz_repeat = horz_repeat
+		self.vert_repeat = vert_repeat
+
+		self.card_height = ((self.blank_rows * 2) + (self.card_rows * self.vert_repeat)) * self.row_height
+
+
+class PCGenerator:
+
+	def __init__(self, handler, data, machine_id, vert_repeat):
+
+		self.handler = handler
+		self.data = data.split()
+		self.layout = Layout(
+			machine_id,
+			len(self.data[0]),
+			len(self.data),
+			specs[machine_id]['stitches'] / len(self.data[0]),
+			vert_repeat
+		)
+
+	def generate(self):
 
 		diagram = self.create_card()
 
@@ -72,7 +132,7 @@ class PCGenerator:
 		self.draw_pattern(diagram, self.data, objects)
 		self.draw_blank_lines(diagram, objects)
 		self.draw_clip_holes(diagram, objects)
-		self.draw_sprocket_holes(diagram, objects)
+		self.draw_tractor_holes(diagram, objects)
 
 		# sort the list to optimize cutting
 		sorted_objects = sorted(objects, key=lambda x: (float(x.attribs['cy']), float(x.attribs['cx'])))
@@ -82,163 +142,133 @@ class PCGenerator:
 		return diagram.tostring()
 
 	def create_card(self):
-		global card_width
-		global card_height
-		
+
 		diagram = svgwrite.Drawing(
 			"punchcard.svg",
 			size=(
-				'{0}mm'.format(card_width),
-				'{0}mm'.format(card_height)),
+				'{0}mm'.format(self.layout.card_width),
+				'{0}mm'.format(self.layout.card_height)),
 			viewBox=(
-				'0 0 {0} {1}'.format(card_width, card_height)),
+				'0 0 {0} {1}'.format(self.layout.card_width, self.layout.card_height)),
 			preserveAspectRatio='none')
 		
-		shape_points = [
-			(2, 0),
-			(card_width-2, 0),
-			(card_width-1, 1),
-			(card_width-1, 20),
-			(card_width, 22),
-			(card_width, card_height-22),
-			(card_width-1, card_height-20),
-			(card_width-1, card_height-1),
-			(card_width-2, card_height),
-			(2, card_height),
-			(1, card_height-1),
-			(1, card_height-20),
-			(0, card_height-22),
-			(0, 22),
-			(1, 20),
-			(1, 1)]
 		diagram.add(diagram.polygon(
-			points=shape_points,
-			fill=fill_color,
-			stroke=stroke_color,
-			stroke_width=stroke_width))
+			points=self.get_card_shape(),
+			fill='white',
+			stroke='black',
+			stroke_width=.1))
 			
 		return diagram
 
 	def draw_pattern(self, diagram, lines, objects):
-		global card_rows
-		global card_stitches
-		global fill_color
-		global pattern_hole_radius
-		global row_color
-		global row_height
-		global side_margin
-		global stitch_width
-		global stroke_color
-		global stroke_width
-		
+
 		# main body of card
-		yoffset = 10.0 + (row_height / 2)
-		for row_repeat in range(self.vert_repeat):
-			for rows in range(card_rows):
-				xoffset = side_margin + (stitch_width / 2)
-				for stitch_repeat in range(self.horz_repeat):
-					for stitches in range(card_stitches):
+		yoffset = (self.layout.blank_rows * self.layout.row_height) + (self.layout.row_height / 2)
+		for row_repeat in range(self.layout.vert_repeat):
+			for rows in range(self.layout.card_rows):
+				xoffset = self.layout.pattern_hole_xoffset + (self.layout.pattern_hole_radius / 2)
+				for stitch_repeat in range(self.layout.horz_repeat):
+					for stitches in range(self.layout.card_stitches):
 						if lines[rows][stitches].upper() == 'X':
 							objects.append(diagram.circle(
 								center=(xoffset, yoffset),
-								fill=fill_color,
-								r = (pattern_hole_radius / 2),
-								stroke=stroke_color,
-								stroke_width=stroke_width))
-						xoffset += stitch_width
-				yoffset += row_height
+								fill='white',
+								r = (self.layout.pattern_hole_radius / 2),
+								stroke='black',
+								stroke_width=.1))
+						xoffset += self.layout.stitch_width
+				yoffset += self.layout.row_height
 
 	def draw_blank_lines(self, diagram, objects):
-		global blank_rows
-		global card_stitches
-		global fill_color
-		global pattern_hole_radius
-		global row_height
-		global side_margin
-		global stitch_width
-		global stroke_color
-		global stroke_width
-		
+
 		# blank rows at top
-		yoffset = row_height / 2
-		for rows in range(blank_rows):
-			xoffset = side_margin + (stitch_width / 2)
-			for stitch_repeat in range(self.horz_repeat):
-				for stitches in range(card_stitches):
+		yoffset = self.layout.row_height / 2
+		for rows in range(self.layout.blank_rows):
+			xoffset = self.layout.pattern_hole_xoffset + (self.layout.pattern_hole_radius / 2)
+			for stitch_repeat in range(self.layout.horz_repeat):
+				for stitches in range(self.layout.card_stitches):
 					objects.append(diagram.circle(
 						center=(xoffset, yoffset),
-						fill=fill_color,
-						r = (pattern_hole_radius / 2),
-						stroke=stroke_color,
-						stroke_width=stroke_width))
-					xoffset += stitch_width
-			yoffset += row_height
+						fill='white',
+						r = (self.layout.pattern_hole_radius / 2),
+						stroke='black',
+						stroke_width=.1))
+					xoffset += self.layout.stitch_width
+			yoffset += self.layout.row_height
 
 		# blank rows at bottom
-		yoffset = (card_height - (row_height * blank_rows)) + (row_height / 2)
-		for rows in range(blank_rows):
-			xoffset = side_margin + (stitch_width / 2)
-			for stitch_repeat in range(self.horz_repeat):
-				for stitches in range(card_stitches):
+		yoffset = (self.layout.card_height - (self.layout.row_height * self.layout.blank_rows)) + (self.layout.row_height / 2)
+		for rows in range(self.layout.blank_rows):
+			xoffset = self.layout.pattern_hole_xoffset + (self.layout.pattern_hole_radius / 2)
+			for stitch_repeat in range(self.layout.horz_repeat):
+				for stitches in range(self.layout.card_stitches):
 					objects.append(diagram.circle(
 						center=(xoffset, yoffset),
-						fill=fill_color,
-						r = (pattern_hole_radius / 2),
-						stroke=stroke_color,
-						stroke_width=stroke_width))
-					xoffset += stitch_width
-			yoffset += row_height
+						fill='white',
+						r = (self.layout.pattern_hole_radius / 2),
+						stroke='black',
+						stroke_width=.1))
+					xoffset += self.layout.stitch_width
+			yoffset += self.layout.row_height
 
 	def draw_clip_holes(self, diagram, objects):
-		global card_height
-		global clip_hole_radius
-		global fill_color
-		global row_height
-		global side_margin
-		global stitch_width
-		global stroke_color
-		global stroke_width
-		
-		left_xoffset = side_margin + (stitch_width / 2) - 6.0
-		right_xoffset = (card_width - side_margin - (stitch_width / 2)) + 6.0
-		yoffset = row_height / 2
 
-		while yoffset < card_height:
-			# clip holes on left
+		self.draw_side_holes(
+			diagram,
+			objects,
+			self.layout.clip_hole_xoffset,
+			self.layout.clip_hole_yoffset,
+			self.layout.clip_hole_radius)
+
+	def draw_tractor_holes(self, diagram, objects):
+
+		self.draw_side_holes(
+			diagram,
+			objects,
+			self.layout.tractor_hole_xoffset,
+			self.layout.tractor_hole_yoffset,
+			self.layout.tractor_hole_radius)
+
+	def draw_side_holes(self, diagram, objects, xoffset, yoffset, radius):
+
+		left_xoffset = xoffset + (radius / 2)
+		right_xoffset = self.layout.card_width - left_xoffset
+
+		while yoffset < self.layout.card_height:
+			# holes on left
 			objects.append(diagram.circle(
 				center=(left_xoffset, yoffset),
-				fill=fill_color,
-				r = (clip_hole_radius / 2),
-				stroke=stroke_color,
-				stroke_width=stroke_width))
-			# clip holes on right
+				fill='white',
+				r = (radius / 2),
+				stroke='black',
+				stroke_width=.1))
+			# holes on right
 			objects.append(diagram.circle(
 				center=(right_xoffset, yoffset),
-				fill=fill_color,
-				r = (clip_hole_radius / 2),
-				stroke=stroke_color,
-				stroke_width=stroke_width))
-			yoffset += row_height
+				fill='white',
+				r = (radius / 2),
+				stroke='black',
+				stroke_width=.1))
+			yoffset += self.layout.row_height
 
-	def draw_sprocket_holes(self, diagram, objects):
-		
-		left_xoffset = 6.5
-		right_xoffset = card_width - 6.5
-		yoffset = row_height
-		for row_repeat in range(self.vert_repeat):
-			for rows in range(((card_rows * self.vert_repeat) + (blank_rows * 2)) / 2):
-				# sprocket holes on left
-				objects.append(diagram.circle(
-					center=(left_xoffset, yoffset),
-					fill=fill_color,
-					r = (sprocket_hole_radius / 2),
-					stroke=stroke_color,
-					stroke_width=stroke_width))
-				# sprocket holes on left
-				objects.append(diagram.circle(
-					center=(right_xoffset, yoffset),
-					fill=fill_color,
-					r = (sprocket_hole_radius / 2),
-					stroke=stroke_color,
-					stroke_width=stroke_width))
-				yoffset += (row_height * 2)
+	def get_card_shape(self):
+
+		corner_radius =  self.layout.corner_offset + 1
+
+		return [
+			(corner_radius, 0),
+			(self.layout.card_width - corner_radius, 0),
+			(self.layout.card_width -  self.layout.corner_offset,  self.layout.corner_offset),
+			(self.layout.card_width -  self.layout.corner_offset, 20),
+			(self.layout.card_width, 22),
+			(self.layout.card_width, self.layout.card_height - 22),
+			(self.layout.card_width -  self.layout.corner_offset, self.layout.card_height - 20),
+			(self.layout.card_width -  self.layout.corner_offset, self.layout.card_height - 1),
+			(self.layout.card_width - corner_radius, self.layout.card_height),
+			(corner_radius, self.layout.card_height),
+			( self.layout.corner_offset, self.layout.card_height -  self.layout.corner_offset),
+			( self.layout.corner_offset, self.layout.card_height - 20),
+			(0, self.layout.card_height - 22),
+			(0, 22),
+			( self.layout.corner_offset, 20),
+			( self.layout.corner_offset, 1)]
