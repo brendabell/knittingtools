@@ -102,7 +102,7 @@ class MyHandler(BaseHTTPRequestHandler):
 def main():
 	try:
 		logger.info("Starting server...")
-		server = HTTPServer(('', 8088), MyHandler)
+		server = HTTPServer(('', 8080), MyHandler)
 		server.serve_forever()
 	except KeyboardInterrupt:
 		logger.info("Stopping server...")
