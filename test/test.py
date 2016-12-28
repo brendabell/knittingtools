@@ -1,4 +1,7 @@
-from pcgenerator import PCGenerator
+# invocation: python -m test.test
+
+from modules.pcgenerator import PCGenerator
+
 pattern='-x--\n-xxx\nxxx-\n--x-\n'
 machine = '12-stitch-br-sr'
 #machine = '24-stitch-br-sr'

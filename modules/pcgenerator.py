@@ -139,7 +139,7 @@ class PCGenerator:
 		for i in sorted_objects:
 			diagram.add(i)
 
-		return diagram.tostring()
+		return '<?xml version="1.0" encoding="UTF-8" standalone="no"?>{}'.format(diagram.tostring())
 
 	def create_card(self):
 
