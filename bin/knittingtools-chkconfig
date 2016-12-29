@@ -1,0 +1,62 @@
+#!/bin/bash
+#
+# chkconfig: 2345 75 35
+# description: knittingtools
+
+SERVICE=knittingtools
+
+# Source function library.
+. /etc/init.d/functions
+
+lockfile=/var/lock/${SERVICE}.lock
+procname=/path/to/knittingtools/venv/bin/python
+scriptname=/path/to/knittingtools/server.py
+pidfile=/var/run/${SERVICE}.pid
+
+RETVAL=0
+prog="knittingtools"
+
+start () {
+    if [ -f "$pidfile" ]; then
+        checkpid `cat $pidfile` && return 0
+    fi
+    echo -n $"Starting $prog: "
+    $procname $scriptname 1>/dev/null 2>&1 &
+    RETVAL=$?
+    PID=$!
+    echo $PID
+    echo $PID >$pidfile
+    echo
+    [ $RETVAL -eq 0 ] && touch $lockfile
+    return $RETVAL
+}
+
+stop () {
+    RETVAL=0
+    if [ -f "${pidfile}" ]; then
+        echo -n $"Stopping $prog: "
+        killproc -p ${pidfile} $procname
+        RETVAL=$?
+        echo
+    fi
+    [ $RETVAL -eq 0 ] && rm -f $lockfile
+    return $RETVAL
+}
+
+restart () {
+    stop
+    start
+}
+
+# See how we were called.
+case "$1" in
+    start|stop|restart)
+        $1 ;;
+    status)
+        status -p ${pidfile} $procname ;;
+    condrestart)
+        test ! -f $lockfile || restart ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart|condrestart}"
+        exit 2
+esac
