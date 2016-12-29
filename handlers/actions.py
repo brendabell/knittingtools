@@ -1,6 +1,8 @@
+import cairosvg
 import cgi
 import os
 import sys
+import time
 import traceback
 
 from modules.pcgenerator import PCGenerator
@@ -39,7 +41,7 @@ def pcgenerator_get(handler):
 def pcgenerator_post(handler):
 
 	try:
-		ctype, pdict = cgi.parse_header(handler.headers.getheader('content-type'))
+		ctype, pdict = cgi.parse_header(handler.headers.getheader('Content-Type'))
 		if ctype == 'multipart/form-data':
 			query=cgi.parse_multipart(handler.rfile, pdict)
 
@@ -52,6 +54,7 @@ def pcgenerator_post(handler):
 		else:
 			machine_type = query.get('machine')
 			vert_repeat = query.get('vert')
+			convert_to_png = query.get('png', [''])[0] == 'png'
 
 			generator = PCGenerator(
 				handler,
@@ -61,8 +64,16 @@ def pcgenerator_post(handler):
 			result = generator.generate()
 
 			handler.send_response(200)
-			handler.send_header('Content-type', 'image/svg+xml')
-			handler.send_header("Content-Disposition", "attachment; filename=punchcard.svg")
+			filename_template = 'attachment; filename="punchcard-{}.{}"'
+
+			if convert_to_png:
+				result = cairosvg.svg2png(bytestring=result)
+				handler.send_header('Content-type', 'image/png')
+				handler.send_header('Content-Disposition', filename_template.format(int(time.time()), "png"))
+			else:
+				handler.send_header('Content-type', 'image/svg+xml')
+				handler.send_header('Content-Disposition', filename_template.format(int(time.time()), "svg"))
+
 			handler.end_headers()
 			handler.wfile.write(result)
 

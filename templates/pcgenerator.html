@@ -35,6 +35,7 @@
 			<li>Select the file to upload.</li>
 			<li>Select your machine type.</li>
 			<li>Enter the # vertical repeats if you need them. The # horizontal repeats will be automatically calculated based on the machine type.</li>
+			<li>Check "Convert to PNG" if you'd like to download a PNG image instead of SVG.</li>
 			<li>Click the Upload button.</li>
 		</ul>In a few seconds, you should see a dialog prompting you for where you want to save your file. If you need more detailed instructions, keep reading below.
 
@@ -68,6 +69,10 @@
 					<td><input type="range" id="vert" name="vert" min="1" max="24" step="1" value="1">
 						<output id="y" name="y" value="1"></output>
 						<script>y.value=vert.value;</script></td>
+				</tr>
+				<tr>
+					<td style="test-align:right">Convert to PNG image:</td>
+					<td><input type="checkbox" name="png" value="png"></td>
 				</tr>
 				<tr>
 					<td></td>
@@ -107,6 +112,8 @@
 		</pre>
 
 		<p>The resulting SVG file can be imported into any application that understands SVG. You can also display the SVG in some browsers. Neither the text file or resulting SVG will be saved on this site. Be sure to keep them in a safe location so they don't get lost.
+
+		<p>Silhouette users have reported issues importing SVG files or having to resize the SVG in Inkscape before importing. If you have trouble with the SVG file, try checking the Convert To PNG button to see if that helps.
 
 		<h2>Bugs & Disclaimers</h2>
 		<p>This program has only been tested using Sure Cuts A Lot on a Pazzles Creative Mighty. YMMV!
