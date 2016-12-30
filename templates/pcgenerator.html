@@ -24,16 +24,18 @@
 
 	<body>
 		<h1>Punchcard Generator</h1>
-		<a href="/">&lt;Back&gt;</a>
+		<a href="/knittingtools">[Back To Tools Home]</a>&nbsp;<a href="http://www.brendaabell.com">[Back To My Blog]</a>
 		<hr>
 
 		<p>This app will allow you to upload a small text file that contains your pattern represented as a sequence of rows with X's for punched holes and any other character except space for unpunched holes. The program will generate an SVG file that can be imported into the software you use to cut material with your die cutter.
+		<p>IMPORTANT!!! This app is currently considered Beta. As such, there may be bugs. If you see something that doesn't look right, please report the issue using the instructions at the bottom of this page.
 
 		<h2>TL;DR</h2>
 		<ul>
 			<li>Select the file to upload.</li>
-			<li>Enter your punchcard row height and column width in millimeters.</li>
-			<li>Enter horizontal and vertical repeats if you need them.</li>
+			<li>Select your machine type.</li>
+			<li>Enter the # vertical repeats if you need them. The # horizontal repeats will be automatically calculated based on the machine type.</li>
+			<li>Check "Convert to PNG" if you'd like to download a PNG image instead of SVG.</li>
 			<li>Click the Upload button.</li>
 		</ul>In a few seconds, you should see a dialog prompting you for where you want to save your file. If you need more detailed instructions, keep reading below.
 
@@ -43,33 +45,34 @@
 			method="POST"
 			enctype="multipart/form-data"
 			action="/pcgenerator"
-			onfocus="x.value=horz.value; y.value=vert.value"
-			oninput="x.value=horz.value; y.value=vert.value">
+			onfocus="y.value=vert.value"
+			oninput="y.value=vert.value">
 
 			<table>
 				<tr>
 					<td style="text-align:right">Select file to upload:<br>&nbsp;</td>
-					<td colspan="2"><input type="file" name="upfile"><br><small>(maximum file size 2500 characters)<small></td>
+					<td colspan="2"><input type="file" name="upfile"><br><small>(maximum file size 4000 characters)<small></td>
 				</tr>
 				<tr>
-					<td style="text-align:right">Height of 1 punchcard row (mm):</td>
-					<td colspan="2"><input type="number" name="rowheight" min="1.0" max="10.0" step="0.1" value="5.0"></td>
+					<td style="text-align:right">Select machine type:<br>&nbsp;</td>
+					<td colspan="2">
+						<select name="machine">
+							<option value="12-stitch-br-sr">12-stitch Brother/Silver Reed/Studio</option>
+							<option value="24-stitch-br-sr">24-stitch Brother/Silver Reed/Studio</option>
+							<option value="40-stitch-deco">40-stitch Passap Deco</option>
+						</select>
+						<p><b>NOTICE: Passap Deco support is currently experimental and has not been fully tested.</b>
+				</td>
 				</tr>
 				<tr>
-					<td style="text-align:right">Width of 1 punchcard column (mm):</td>
-					<td colspan="2"><input type="number" name="colwidth" min="1.0" max="10.0" step="0.1" value="4.5"></td>
-				</tr>
-				<tr>
-					<td style="text-align:right"># Horizontal repeats (up to 12):</td>
-					<td colspan="2"><input type="range" id="horz" name="horz" min="1" max="12" step="1" value="1">
-						<output id="x" name="x" value="1"></output>
-						<script>x.value=horz.value;</script></td>
-				</tr>
-				<tr>
-					<td style="text-align:right"># Vertical repeats (up to 12):</td>
-					<td><input type="range" id="vert" name="vert" min="1" max="12" step="1" value="1">
+					<td style="text-align:right"># Vertical repeats (up to 24):</td>
+					<td><input type="range" id="vert" name="vert" min="1" max="24" step="1" value="1">
 						<output id="y" name="y" value="1"></output>
 						<script>y.value=vert.value;</script></td>
+				</tr>
+				<tr>
+					<td style="test-align:right">Convert to PNG image:</td>
+					<td><input type="checkbox" name="png" value="png"></td>
 				</tr>
 				<tr>
 					<td></td>
@@ -95,9 +98,11 @@
 	---x-----x--
 		</pre>
 
-		<p>By default, the generator will do 1 horizontal repeat and 1 vertical repeat. I.e., if your file contains 36 rows with 24 characters per row, the generated file will produce a 24 row x 36 stitch card. You can increase the width and/or length by adjusting the horizontal and/or vertical repeat before clicking the upload button.
+		<p>The generator will determine the number of horizontal repeats based on the number of characters in your first row and the type of machine. I.e., if row 1 contains 4 characters and you select a 12-stitch machine, the generator will automatically do 3 horizontal repeats: 4 * 3 = 12.
 
-		<p>What this means is that you can design a simple 4x4 card and use repeats to make the card as wide or as long as it needs to be in order to work properly. For example, the following text file will generate a 24 row x 48 stitch card if you specify 6 for the horizontal repeat and 12 for the vertical repeat:
+		<p>By default, the generator will do 1 vertical repeat. I.e., if your file contains 36 rows, the generated file will produce a 36 row card. You can increase the length by adjusting the vertical repeat before clicking the upload button.
+
+		<p>What this means is that you can design a simple 4x4 card and use repeats to make the card as wide or as long as it needs to be in order to work properly. For example, the following text file will generate a 24 row x 48 stitch card if you select a 24-stitch machine and specify 12 for the vertical repeat:
 
 		<pre>
 	x-x-
@@ -106,29 +111,11 @@
 	-x-x
 		</pre>
 
-		<p>You'll need to specify the height and width of 1 row and 1 column on the punchcard. You can determine the correct values by measuring the size of the squares on a card that works with your knitting machine. If your card doesn't have squares, you can measure the distance between the centers of two adjacent holes. For reference:
-
-		<p>
-		<table>
-			<tr>
-				<th>Knitting Machine</th>
-				<th style="text-align:center">Row Height<br>(mm)</th>
-				<th style="text-align:center">Column Width<br>(mm)</th>
-			</tr>
-			<tr>
-				<td>Brother 24-Stitch Standard</td>
-				<td style="text-align:center">5</td>
-				<td style="text-align:center">4.5</td>
-			</tr>
-			<tr>
-				<td>Brother 12-Stitch Bulky</td>
-				<td style="text-align:center">5</td>
-				<td style="text-align:center">9</td>
-			</tr>
-		</table>
-
 		<p>The resulting SVG file can be imported into any application that understands SVG. You can also display the SVG in some browsers. Neither the text file or resulting SVG will be saved on this site. Be sure to keep them in a safe location so they don't get lost.
 
+		<p>Silhouette users have reported issues importing SVG files or having to resize the SVG in Inkscape before importing. If you have trouble with the SVG file, try checking the Convert To PNG button to see if that helps.
+
+		<h2>Bugs & Disclaimers</h2>
 		<p>This program has only been tested using Sure Cuts A Lot on a Pazzles Creative Mighty. YMMV!
 
 		<p>If you have questions or feedback, please contact <a href="http://www.ravelry.com/people/beebell">beebell on Ravelry</a> via private message or log at issue on <a href="https://github.com/brendabell/knittingtools/issues">GitHub</a>.</p>
