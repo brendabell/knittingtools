@@ -115,10 +115,10 @@ class Layout:
 		self.card_stitches = stitches
 		self.card_rows = rows
 
-		if self.card_rows > 200 or self.card_stitches > 30:
+		if self.card_rows > 200 or self.card_stitches > specs[machine_id]['stitches']:
 			raise ValueError(
-				"Your pattern seems to exceed 200 rows and/or 30 stitches. "
-				"Are you sure you uploaded the right text file?")
+				"Your pattern seems to exceed 200 rows and/or {} stitches. "
+				"Are you sure you uploaded the right text file?".format(specs[machine_id]['stitches']))
 
 		self.horz_repeat = horz_repeat
 		self.vert_repeat = vert_repeat
