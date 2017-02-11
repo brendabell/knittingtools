@@ -19,6 +19,22 @@ specs = {
 		'stitches': 12,
 		'corner_offset': 2,
 	},
+	'18-stitch-mk70': {
+		'card_width': 142,
+		'blank_rows': 2,
+		'row_height': 5.0,
+		'stitch_width': 6.0,
+		'pattern_hole_radius': 3.5,
+		'pattern_hole_xoffset': 17.5,
+		'clip_hole_radius': 3.5,
+		'clip_hole_xoffset': 5.0,
+		'clip_hole_yoffset': 5.0,
+		'tractor_hole_radius': 3.0,
+		'tractor_hole_xoffset': 12.5,
+		'tractor_hole_yoffset': 2.5,
+		'stitches': 18,
+		'corner_offset': 2,
+	},
 	'24-stitch-br-sr': {
 		'card_width': 142,
 		'blank_rows': 2,
@@ -99,10 +115,10 @@ class Layout:
 		self.card_stitches = stitches
 		self.card_rows = rows
 
-		if self.card_rows > 200 or self.card_stitches > 30:
+		if self.card_rows > 200 or self.card_stitches > specs[machine_id]['stitches']:
 			raise ValueError(
-				"Your pattern seems to exceed 200 rows and/or 30 stitches. "
-				"Are you sure you uploaded the right text file?")
+				"Your pattern seems to exceed 200 rows and/or {} stitches. "
+				"Are you sure you uploaded the right text file?".format(specs[machine_id]['stitches']))
 
 		self.horz_repeat = horz_repeat
 		self.vert_repeat = vert_repeat
