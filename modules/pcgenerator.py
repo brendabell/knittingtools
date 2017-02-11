@@ -52,16 +52,16 @@ specs = {
 		'corner_offset': 2,
 	},
 	'40-stitch-deco': {
-		'card_width': 242,
+		'card_width': 243,
 		'blank_rows': 3,
-		'row_height': (305.0 / 58.0),
+		'row_height': (100.0 / 19.0),
 		'stitch_width': 5.0,
-		'pattern_hole_radius': 3.0,
+		'pattern_hole_radius': 4.0,
 		'pattern_hole_xoffset': 22.0,
-		'clip_hole_radius': 3.0,
+		'clip_hole_radius': 3.5,
 		'clip_hole_xoffset': 2.0,
 		'clip_hole_yoffset': 5.5,
-		'tractor_hole_radius': 2.5,
+		'tractor_hole_radius': 3.0,
 		'tractor_hole_xoffset': 12.5,
 		'tractor_hole_yoffset': 5.5,
 		'stitches': 40,
@@ -271,20 +271,33 @@ class PCGenerator:
 
 		corner_radius =  self.layout.corner_offset + 1
 
-		return [
-			(corner_radius, 0),
-			(self.layout.card_width - corner_radius, 0),
-			(self.layout.card_width -  self.layout.corner_offset,  self.layout.corner_offset),
-			(self.layout.card_width -  self.layout.corner_offset, 20),
-			(self.layout.card_width, 22),
-			(self.layout.card_width, self.layout.card_height - 22),
-			(self.layout.card_width -  self.layout.corner_offset, self.layout.card_height - 20),
-			(self.layout.card_width -  self.layout.corner_offset, self.layout.card_height - 1),
-			(self.layout.card_width - corner_radius, self.layout.card_height),
-			(corner_radius, self.layout.card_height),
-			( self.layout.corner_offset, self.layout.card_height -  self.layout.corner_offset),
-			( self.layout.corner_offset, self.layout.card_height - 20),
-			(0, self.layout.card_height - 22),
-			(0, 22),
-			( self.layout.corner_offset, 20),
-			( self.layout.corner_offset, 1)]
+		#   a------------------b
+		#  p                    c
+		#  |                    |
+		#  o                    d
+		# n                      e
+		# |                      |
+		# m                      f
+		#  l                    g
+		#  |                    |
+		#  k                    h
+		#   j------------------i
+
+		a = (corner_radius, 0)
+		b = (self.layout.card_width - corner_radius, 0)
+		c = (self.layout.card_width - self.layout.corner_offset, 1)
+		d = (self.layout.card_width - self.layout.corner_offset, 20)
+		e = (self.layout.card_width, 22)
+		f = (self.layout.card_width, self.layout.card_height - 22)
+		g = (self.layout.card_width - self.layout.corner_offset, self.layout.card_height - 20)
+		h = (self.layout.card_width - self.layout.corner_offset, self.layout.card_height - 1)
+		i = (self.layout.card_width - corner_radius, self.layout.card_height)
+		j = (corner_radius, self.layout.card_height)
+		k = ( self.layout.corner_offset, self.layout.card_height - 1)
+		l = ( self.layout.corner_offset, self.layout.card_height - 20)
+		m = (0, self.layout.card_height - 22)
+		n = (0, 22)
+		o = ( self.layout.corner_offset, 20)
+		p = ( self.layout.corner_offset, 1)
+
+		return [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p]

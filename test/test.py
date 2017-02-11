@@ -3,8 +3,10 @@
 from modules.pcgenerator import PCGenerator
 import cairosvg
 
-pattern='-x--\n-xxx\nxxx-\n--x-\n'
+#pattern='--x---\n--xxxx\n-xxxx-\nxxxx--\n---x--\n'
+pattern='-x\nx-\n'
 #machine = '12-stitch-br-sr'
+#machine = '18-stitch-mk70'
 #machine = '24-stitch-br-sr'
 machine = '40-stitch-deco'
 generator = PCGenerator(None, pattern, machine, 10)
