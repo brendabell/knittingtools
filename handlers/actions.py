@@ -6,6 +6,7 @@ import time
 import traceback
 
 from modules.pcgenerator import PCGenerator
+from modules.pcgenerator import calibrate
 
 def pcgenerator_get(handler):
 
@@ -45,26 +46,31 @@ def pcgenerator_post(handler):
 		if ctype == 'multipart/form-data':
 			query=cgi.parse_multipart(handler.rfile, pdict)
 
-		upfilecontent = query.get('upfile')
-		if len(upfilecontent[0]) > 4000:
-			handler.send_response(302)
-			handler.send_header('Content-type', 'text/html')
-			handler.end_headers()
-			handler.wfile.write("Sorry. Your file cannot exceed 2500 bytes!")
+		calibrate = query.get('test', [''])[0] == 'test'
+		if calibrate:
+			result = calibrate()
+			filename_template = 'attachment; filename="calibrate-{}.{}"'
 		else:
-			machine_type = query.get('machine')
-			vert_repeat = query.get('vert')
-			convert_to_png = query.get('png', [''])[0] == 'png'
+			upfilecontent = query.get('upfile')
+			if len(upfilecontent[0]) > 4000:
+				handler.send_response(302)
+				handler.send_header('Content-type', 'text/html')
+				handler.end_headers()
+				handler.wfile.write("Sorry. Your file cannot exceed 2500 bytes!")
+			else:
+				machine_type = query.get('machine')
+				vert_repeat = query.get('vert')
+				convert_to_png = query.get('png', [''])[0] == 'png'
 
-			generator = PCGenerator(
-				handler,
-				upfilecontent[0],
-				machine_type[0],
-				int(vert_repeat[0]))
-			result = generator.generate()
+				generator = PCGenerator(
+					handler,
+					upfilecontent[0],
+					machine_type[0],
+					int(vert_repeat[0]))
+				result = generator.generate()
+				filename_template = 'attachment; filename="punchcard-{}.{}"'
 
 			handler.send_response(200)
-			filename_template = 'attachment; filename="punchcard-{}.{}"'
 
 			if convert_to_png:
 				result = cairosvg.svg2png(bytestring=result)

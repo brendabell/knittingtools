@@ -8,12 +8,12 @@ specs = {
 		'blank_rows': 2,
 		'row_height': 5.0,
 		'stitch_width': 9.0,
-		'pattern_hole_radius': 3.5,
+		'pattern_hole_diameter': 3.5,
 		'pattern_hole_xoffset': 22.5,
-		'clip_hole_radius': 3.5,
+		'clip_hole_diameter': 3.5,
 		'clip_hole_xoffset': 5.0,
 		'clip_hole_yoffset': 5.0,
-		'tractor_hole_radius': 3.0,
+		'tractor_hole_diameter': 3.0,
 		'tractor_hole_xoffset': 12.5,
 		'tractor_hole_yoffset': 2.5,
 		'stitches': 12,
@@ -24,12 +24,12 @@ specs = {
 		'blank_rows': 2,
 		'row_height': 5.0,
 		'stitch_width': 6.0,
-		'pattern_hole_radius': 3.5,
+		'pattern_hole_diameter': 3.5,
 		'pattern_hole_xoffset': 17.5,
-		'clip_hole_radius': 3.5,
+		'clip_hole_diameter': 3.5,
 		'clip_hole_xoffset': 5.0,
 		'clip_hole_yoffset': 5.0,
-		'tractor_hole_radius': 3.0,
+		'tractor_hole_diameter': 3.0,
 		'tractor_hole_xoffset': 12.5,
 		'tractor_hole_yoffset': 2.5,
 		'stitches': 18,
@@ -40,12 +40,12 @@ specs = {
 		'blank_rows': 2,
 		'row_height': 5.0,
 		'stitch_width': 4.5,
-		'pattern_hole_radius': 3.5,
+		'pattern_hole_diameter': 3.5,
 		'pattern_hole_xoffset': 17.5,
-		'clip_hole_radius': 3.5,
+		'clip_hole_diameter': 3.5,
 		'clip_hole_xoffset': 5.0,
 		'clip_hole_yoffset': 5.0,
-		'tractor_hole_radius': 3.0,
+		'tractor_hole_diameter': 3.0,
 		'tractor_hole_xoffset': 12.0,
 		'tractor_hole_yoffset': 2.5,
 		'stitches': 24,
@@ -56,18 +56,37 @@ specs = {
 		'blank_rows': 3,
 		'row_height': (100.0 / 19.0),
 		'stitch_width': 5.0,
-		'pattern_hole_radius': 4.0,
-		'pattern_hole_xoffset': 22.0,
-		'clip_hole_radius': 3.5,
+		'pattern_hole_diameter': 3.5,
+		'pattern_hole_xoffset': 22.25,
+		'clip_hole_diameter': 3.5,
 		'clip_hole_xoffset': 2.0,
 		'clip_hole_yoffset': 5.5,
-		'tractor_hole_radius': 3.0,
+		'tractor_hole_diameter': 3.0,
 		'tractor_hole_xoffset': 12.5,
 		'tractor_hole_yoffset': 5.5,
 		'stitches': 40,
 		'corner_offset': 0,
 	},
 }
+
+
+def calibrate():
+
+	diagram = svgwrite.Drawing(
+		"calibrate.svg",
+		size=(
+			'100mm',
+			'100mm'),
+		viewBox=(
+			'0 0 100 100'),
+		preserveAspectRatio='none')
+	diagram.add(
+		diagram.polygon(
+			[(10,10), (90,10), (90,90), (10,90), (10,10)],
+			fill='white',
+			stroke='red',
+			stroke_width=.1))
+	return '<?xml version="1.0" encoding="UTF-8" standalone="no"?>{}'.format(diagram.tostring())
 
 
 class Layout:
@@ -86,14 +105,14 @@ class Layout:
 		# width of one stitch on the card in mm
 		self.stitch_width = specs[machine_id]['stitch_width']
 
-		# radius of a pattern hole in mm
-		self.pattern_hole_radius = specs[machine_id]['pattern_hole_radius']
+		# diameter of a pattern hole in mm
+		self.pattern_hole_diameter = specs[machine_id]['pattern_hole_diameter']
 
 		# offset of the first pattern hole from the left edge of the card in mm
 		self.pattern_hole_xoffset = specs[machine_id]['pattern_hole_xoffset']
 
-		# radius of a clip hole in mm
-		self.clip_hole_radius = specs[machine_id]['clip_hole_radius']
+		# diameter of a clip hole in mm
+		self.clip_hole_diameter = specs[machine_id]['clip_hole_diameter']
 
 		# offset of a clip hole from the left/right edge of the card in mm
 		self.clip_hole_xoffset = specs[machine_id]['clip_hole_xoffset']
@@ -101,8 +120,8 @@ class Layout:
 		# offset of a clip hole from the top/bottom edges of the card in mm
 		self.clip_hole_yoffset = specs[machine_id]['clip_hole_yoffset']
 
-		# radius of a tractor hole in mm
-		self.tractor_hole_radius = specs[machine_id]['tractor_hole_radius']
+		# diameter of a tractor hole in mm
+		self.tractor_hole_diameter = specs[machine_id]['tractor_hole_diameter']
 
 		# offset of a tractor hole from the left/right edge of the card in mm
 		self.tractor_hole_xoffset = specs[machine_id]['tractor_hole_xoffset']
@@ -182,14 +201,14 @@ class PCGenerator:
 		yoffset = (self.layout.blank_rows * self.layout.row_height) + (self.layout.row_height / 2)
 		for row_repeat in range(self.layout.vert_repeat):
 			for rows in range(self.layout.card_rows):
-				xoffset = self.layout.pattern_hole_xoffset + (self.layout.pattern_hole_radius / 2)
+				xoffset = self.layout.pattern_hole_xoffset + (self.layout.pattern_hole_diameter / 2)
 				for stitch_repeat in range(self.layout.horz_repeat):
 					for stitches in range(self.layout.card_stitches):
 						if lines[rows][stitches].upper() == 'X':
 							objects.append(diagram.circle(
 								center=(xoffset, yoffset),
 								fill='white',
-								r = (self.layout.pattern_hole_radius / 2),
+								r = (self.layout.pattern_hole_diameter / 2),
 								stroke='black',
 								stroke_width=.1))
 						xoffset += self.layout.stitch_width
@@ -200,13 +219,13 @@ class PCGenerator:
 		# blank rows at top
 		yoffset = self.layout.row_height / 2
 		for rows in range(self.layout.blank_rows):
-			xoffset = self.layout.pattern_hole_xoffset + (self.layout.pattern_hole_radius / 2)
+			xoffset = self.layout.pattern_hole_xoffset + (self.layout.pattern_hole_diameter / 2)
 			for stitch_repeat in range(self.layout.horz_repeat):
 				for stitches in range(self.layout.card_stitches):
 					objects.append(diagram.circle(
 						center=(xoffset, yoffset),
 						fill='white',
-						r = (self.layout.pattern_hole_radius / 2),
+						r = (self.layout.pattern_hole_diameter / 2),
 						stroke='black',
 						stroke_width=.1))
 					xoffset += self.layout.stitch_width
@@ -215,13 +234,13 @@ class PCGenerator:
 		# blank rows at bottom
 		yoffset = (self.layout.card_height - (self.layout.row_height * self.layout.blank_rows)) + (self.layout.row_height / 2)
 		for rows in range(self.layout.blank_rows):
-			xoffset = self.layout.pattern_hole_xoffset + (self.layout.pattern_hole_radius / 2)
+			xoffset = self.layout.pattern_hole_xoffset + (self.layout.pattern_hole_diameter / 2)
 			for stitch_repeat in range(self.layout.horz_repeat):
 				for stitches in range(self.layout.card_stitches):
 					objects.append(diagram.circle(
 						center=(xoffset, yoffset),
 						fill='white',
-						r = (self.layout.pattern_hole_radius / 2),
+						r = (self.layout.pattern_hole_diameter / 2),
 						stroke='black',
 						stroke_width=.1))
 					xoffset += self.layout.stitch_width
@@ -234,7 +253,7 @@ class PCGenerator:
 			objects,
 			self.layout.clip_hole_xoffset,
 			self.layout.clip_hole_yoffset,
-			self.layout.clip_hole_radius)
+			self.layout.clip_hole_diameter)
 
 	def draw_tractor_holes(self, diagram, objects):
 
@@ -243,11 +262,11 @@ class PCGenerator:
 			objects,
 			self.layout.tractor_hole_xoffset,
 			self.layout.tractor_hole_yoffset,
-			self.layout.tractor_hole_radius)
+			self.layout.tractor_hole_diameter)
 
-	def draw_side_holes(self, diagram, objects, xoffset, yoffset, radius):
+	def draw_side_holes(self, diagram, objects, xoffset, yoffset, diameter):
 
-		left_xoffset = xoffset + (radius / 2)
+		left_xoffset = xoffset + (diameter / 2)
 		right_xoffset = self.layout.card_width - left_xoffset
 
 		while yoffset < self.layout.card_height:
@@ -255,21 +274,21 @@ class PCGenerator:
 			objects.append(diagram.circle(
 				center=(left_xoffset, yoffset),
 				fill='white',
-				r = (radius / 2),
+				r = (diameter / 2),
 				stroke='black',
 				stroke_width=.1))
 			# holes on right
 			objects.append(diagram.circle(
 				center=(right_xoffset, yoffset),
 				fill='white',
-				r = (radius / 2),
+				r = (diameter / 2),
 				stroke='black',
 				stroke_width=.1))
 			yoffset += self.layout.row_height
 
 	def get_card_shape(self):
 
-		corner_radius =  self.layout.corner_offset + 1
+		corner_diameter =  self.layout.corner_offset + 1
 
 		#   a------------------b
 		#  p                    c
@@ -283,16 +302,16 @@ class PCGenerator:
 		#  k                    h
 		#   j------------------i
 
-		a = (corner_radius, 0)
-		b = (self.layout.card_width - corner_radius, 0)
+		a = (corner_diameter, 0)
+		b = (self.layout.card_width - corner_diameter, 0)
 		c = (self.layout.card_width - self.layout.corner_offset, 1)
 		d = (self.layout.card_width - self.layout.corner_offset, 20)
 		e = (self.layout.card_width, 22)
 		f = (self.layout.card_width, self.layout.card_height - 22)
 		g = (self.layout.card_width - self.layout.corner_offset, self.layout.card_height - 20)
 		h = (self.layout.card_width - self.layout.corner_offset, self.layout.card_height - 1)
-		i = (self.layout.card_width - corner_radius, self.layout.card_height)
-		j = (corner_radius, self.layout.card_height)
+		i = (self.layout.card_width - corner_diameter, self.layout.card_height)
+		j = (corner_diameter, self.layout.card_height)
 		k = ( self.layout.corner_offset, self.layout.card_height - 1)
 		l = ( self.layout.corner_offset, self.layout.card_height - 20)
 		m = (0, self.layout.card_height - 22)
