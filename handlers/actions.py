@@ -46,8 +46,8 @@ def pcgenerator_post(handler):
 		if ctype == 'multipart/form-data':
 			query=cgi.parse_multipart(handler.rfile, pdict)
 
-		calibrate = query.get('test', [''])[0] == 'test'
-		if calibrate:
+		calibrate_only = query.get('test', [''])[0] == 'test'
+		if calibrate_only:
 			result = calibrate()
 			filename_template = 'attachment; filename="calibrate-{}.{}"'
 		else:
