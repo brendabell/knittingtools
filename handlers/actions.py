@@ -42,26 +42,18 @@ def pcgenerator_get(handler, logger):
 def pcgenerator_post(handler, logger):
 
 	try:
-		logger.debug('parsing header')
 		ctype, pdict = cgi.parse_header(handler.headers.getheader('Content-Type'))
-		logger.debug('checking form data')
 		if ctype == 'multipart/form-data':
-			logger.debug('parsing form data')
 			query=cgi.parse_multipart(handler.rfile, pdict)
 
-		logger.debug('calibrate?')
 		calibrate_only = query.get('test', [''])[0] == 'test'
-		logger.debug(calibrate_only)
 
 		result = None
 		filename_template = None
 		convert_to_png = False
 
 		if calibrate_only:
-			logger.debug('calibrating')
 			result = calibrate()
-			logger.debug('calibration done')
-			logger.debug(result)
 			filename_template = 'attachment; filename="calibrate-{}.{}"'
 		else:
 			upfilecontent = query.get('upfile')
@@ -133,7 +125,7 @@ def pcgenerator_post(handler, logger):
 			"It will be helpful if you include the pattern you uploaded to help me "
 			"diagnose the issue.")
 
-def calculator_get(handler):
+def calculator_get(handler, logger):
 
 	f = open("{}/../templates/{}".format(
 		os.path.dirname(os.path.realpath(__file__)),
@@ -164,7 +156,7 @@ def calculator_get(handler):
 	finally:
 		f.close()
 
-def index_get(handler):
+def index_get(handler, logger):
 	f = open("{}/../templates/{}".format(
 		os.path.dirname(os.path.realpath(__file__)),
 		"index.html"))
