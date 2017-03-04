@@ -55,7 +55,8 @@ def pcgenerator_post(handler, logger):
 
 		result = None
 		filename_template = None
-		
+		convert_to_png = False
+
 		if calibrate_only:
 			logger.debug('calibrating')
 			result = calibrate()
