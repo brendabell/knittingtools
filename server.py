@@ -55,7 +55,7 @@ class MyHandler(BaseHTTPRequestHandler):
 				self.handle_not_found()
 				return
 
-			actions['get'](self)
+			actions['get'](self, logger)
 		except Exception:
 			exc_type, exc_value, exc_traceback = sys.exc_info()
 			self.log_error("%s %s\n" % (
@@ -72,7 +72,7 @@ class MyHandler(BaseHTTPRequestHandler):
 				self.handle_not_found()
 				return
 
-			actions['post'](self)
+			actions['post'](self, logger)
 		except Exception:
 			exc_type, exc_value, exc_traceback = sys.exc_info()
 			self.log_error("%s %s\n" % (

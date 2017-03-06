@@ -17,3 +17,4 @@ text_file.close()
 png_file = open("{}.png".format(machine), "w")
 cairosvg.svg2png(bytestring=result,write_to=png_file)
 png_file.close()
+

@@ -72,9 +72,12 @@
 						<script>y.value=vert.value;</script></td>
 				</tr>
 				<tr>
-					<td style="test-align:right">Convert to PNG image:</td>
+					<td style="text-align:right">Convert to PNG image:</td>
 					<td><input type="checkbox" name="png" value="png"></td>
 				</tr>
+				<tr>
+					<td style="text-align;right">Calibrate Only:</td>
+					<td><input type="checkbox" name="test" value="test"></td>
 				<tr>
 					<td></td>
 					<td colspan="2"><input type="submit" value="Upload"></td>
@@ -115,6 +118,10 @@
 		<p>The resulting SVG file can be imported into any application that understands SVG. You can also display the SVG in some browsers. Neither the text file or resulting SVG will be saved on this site. Be sure to keep them in a safe location so they don't get lost.
 
 		<p>Silhouette users have reported issues importing SVG files or having to resize the SVG in Inkscape before importing. If you have trouble with the SVG file, try checking the Convert To PNG button to see if that gives you a better result.
+
+		<p>Depending on the software you use to view or cut the image, what you see on your screen may or may not be sized properly. If you'd like to calibrate your viewing or cutting software, check the Calibrate Only checkbox and click Upload. That will generate a 100x100mm diagram with a red square. Determine the steps necessary to make your software display or print the square so it's exactly 80x80mm. Then use those same steps to calibrate your software for the generated punchcards.
+
+		<p>If both Convert To PNG and Calibrate Only are checked, the downloaded calibration image will be converted to a PNG image.
 
 		<h2>Bugs & Disclaimers</h2>
 		<p>This program has only been tested using Sure Cuts A Lot on a Pazzles Creative Mighty. YMMV!
