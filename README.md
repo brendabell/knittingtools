@@ -16,8 +16,8 @@ To run the server:
 * Clone this repo
 * If you are installing to a Linux platform that supports chkconfig, copy `./bin/knittingtools-chkconfig` to the location appropriate for your flavor of Linux (usually /etc/rc.d/init.d).
 * Start, stop or restart the server using the following commands:
-** `sudo service knittingtools start`
-** `sudo service knittingtools stop`
-** `sudo service knittingtools restart`
+`sudo service knittingtools start`
+`sudo service knittingtools stop`
+`sudo service knittingtools restart`
 * Use the following command to determine the server's current status:
-** `sudo service knittingtools status`
+`sudo service knittingtools status`
