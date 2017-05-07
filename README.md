@@ -10,7 +10,7 @@ KnittingTools is a simple web app written in Python. It currently supports two m
 
 ## Installation
 * Clone this repo to a local directory.
-* If you are installing to a Linux platform that supports chkconfig, copy `./bin/knittingtools-chkconfig` to the location appropriate for your Linux distribution (usually /etc/rc.d/init.d).
+* If you are installing to a Linux platform that supports chkconfig, copy `./bin/knittingtools-chkconfig` to the location appropriate for your Linux distribution (usually /etc/rc.d/init.d/knittingtools).
 * Edit the init script to reflect the appropriate locations for the lock file, python executable, server.py script and PID file. Note that the app has only been tested using the supplied virtual environment.
 
 ## Running The Application
