@@ -4,7 +4,7 @@ KnittingTools is a simple web app written in Python. It currently supports two m
 * A knitting calculator
 * A punchcard generator
 
-The app has been tested on Python version 2.7 with the following dependencies:
+## Dependencies
 * CairoSVG 1.0.22
 * svgwrite 1.1.8
 
