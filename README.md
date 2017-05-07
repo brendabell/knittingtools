@@ -9,7 +9,7 @@ KnittingTools is a simple web app written in Python. It currently supports two m
 * CairoSVG 1.0.22
 * svgwrite 1.1.8
 
-Newer package versions may work, but has not been tested.
+Newer package versions may work, but have not been tested.
 
 ## Installation
 * Clone this repo to a local directory.
