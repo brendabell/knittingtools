@@ -15,6 +15,8 @@ To run the server:
 
 * Clone this repo
 * If you are installing to a Linux platform that supports chkconfig, copy `./bin/knittingtools-chkconfig` to the location appropriate for your flavor of Linux (usually /etc/rc.d/init.d).
+ * Edit the init script to reflect the appropriate locations for the lock file, python executable, server.py script and PID file.
+ * Note that the app has only been tested using the supplied virtual environment.
 * Start, stop or restart the server using the following commands:
 
 `sudo service knittingtools start`
