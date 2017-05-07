@@ -26,3 +26,5 @@ To run the server:
 * Use the following command to determine the server's current status:
 
 `sudo service knittingtools status`
+
+Access and error logs are written to `/var/log/knittingtools.log` and `/var/log/knittingtools.log` respectively. The log configuration can be modified by editing `logging.conf`.
