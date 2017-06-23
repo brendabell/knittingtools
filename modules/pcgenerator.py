@@ -25,7 +25,7 @@ specs = {
 		'row_height': 5.0,
 		'stitch_width': 6.0,
 		'pattern_hole_diameter': 3.5,
-		'pattern_hole_xoffset': 17.5,
+		'pattern_hole_xoffset': 18.25,
 		'clip_hole_diameter': 3.5,
 		'clip_hole_xoffset': 5.0,
 		'clip_hole_yoffset': 5.0,
