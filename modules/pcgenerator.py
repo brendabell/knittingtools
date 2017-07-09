@@ -4,19 +4,35 @@ import svgwrite
 # machine specs
 specs = {
 	'12-stitch-br-sr': {
+		# total width of the cut card
 		'card_width': 142,
+		# number of overlapping blank rows at the top of the card
 		'blank_rows': 2,
+		# height of one row on the card in mm
 		'row_height': 5.0,
+		# width of one stitch on the card in mm
 		'stitch_width': 9.0,
+		# diameter of a pattern hole in mm
 		'pattern_hole_diameter': 3.5,
-		'pattern_hole_xoffset': 22.5,
+		# diameter of the overlapping pattern holes in mm
+		'overlap_hole_diameter': 3.5,
+		# offset of the first pattern hole from the left edge of the card in mm
+		'pattern_hole_xoffset': 22.5 + (3.5 / 2),
+		# diameter of a clip hole in mm
 		'clip_hole_diameter': 3.5,
-		'clip_hole_xoffset': 5.0,
+		# offset of a clip hole from the left/right edge of the card in mm
+		'clip_hole_xoffset': 5.0 + (3.5 / 2),
+		# offset of a clip hole from the top/bottom edges of the card in mm
 		'clip_hole_yoffset': 5.0,
+		# diameter of a tractor hole in mm
 		'tractor_hole_diameter': 3.0,
-		'tractor_hole_xoffset': 12.5,
+		# offset of a tractor hole from the left/right edge of the card in mm
+		'tractor_hole_xoffset': 12.5 + (3.0 / 2),
+		# offset of a tractor hole from the top/bottom edge of the card in mm
 		'tractor_hole_yoffset': 2.5,
+		# stitches per row
 		'stitches': 12,
+		# offset of the card corners
 		'corner_offset': 2,
 	},
 	'18-stitch-mk70': {
@@ -25,12 +41,13 @@ specs = {
 		'row_height': 5.0,
 		'stitch_width': 6.0,
 		'pattern_hole_diameter': 3.5,
-		'pattern_hole_xoffset': 17.5,
+		'overlap_hole_diameter': 3.5,
+		'pattern_hole_xoffset': 17.5 + (3.5 / 2),
 		'clip_hole_diameter': 3.5,
-		'clip_hole_xoffset': 5.0,
+		'clip_hole_xoffset': 5.0 + (3.5 / 2),
 		'clip_hole_yoffset': 5.0,
 		'tractor_hole_diameter': 3.0,
-		'tractor_hole_xoffset': 12.5,
+		'tractor_hole_xoffset': 12.5 + (3.0 / 2),
 		'tractor_hole_yoffset': 2.5,
 		'stitches': 18,
 		'corner_offset': 2,
@@ -41,12 +58,13 @@ specs = {
 		'row_height': 5.0,
 		'stitch_width': 4.5,
 		'pattern_hole_diameter': 3.5,
-		'pattern_hole_xoffset': 17.5,
+		'overlap_hole_diameter': 3.5,
+		'pattern_hole_xoffset': 17.5 + (3.5 / 2),
 		'clip_hole_diameter': 3.5,
-		'clip_hole_xoffset': 5.0,
+		'clip_hole_xoffset': 5.0 + (3.5 / 2),
 		'clip_hole_yoffset': 5.0,
 		'tractor_hole_diameter': 3.0,
-		'tractor_hole_xoffset': 12.0,
+		'tractor_hole_xoffset': 12.0 + (3.0 / 2),
 		'tractor_hole_yoffset': 2.5,
 		'stitches': 24,
 		'corner_offset': 2,
@@ -57,12 +75,13 @@ specs = {
 		'row_height': 5.0,
 		'stitch_width': 3.6,
 		'pattern_hole_diameter': 2.7,
-		'pattern_hole_xoffset': 17.50,
+		'overlap_hole_diameter': 2.7,
+		'pattern_hole_xoffset': 17.5 + (2.7 / 2),
 		'clip_hole_diameter': 3.5,
-		'clip_hole_xoffset': 5.0,
+		'clip_hole_xoffset': 5.0 + (3.5 / 2),
 		'clip_hole_yoffset': 5.0,
 		'tractor_hole_diameter': 3.0,
-		'tractor_hole_xoffset': 12.0,
+		'tractor_hole_xoffset': 12.0 + (3.0 / 2),
 		'tractor_hole_yoffset': 2.5,
 		'stitches': 30,
 		'corner_offset': 2,
@@ -72,13 +91,14 @@ specs = {
 		'blank_rows': 3,
 		'row_height': (100.0 / 19.0),
 		'stitch_width': 5.0,
-		'pattern_hole_diameter': 3.5,
-		'pattern_hole_xoffset': 22.25,
+		'pattern_hole_diameter': 3.7,
+		'overlap_hole_diameter': 3.7,
+		'pattern_hole_xoffset': 22.15 + (3.7 / 2),
 		'clip_hole_diameter': 3.5,
-		'clip_hole_xoffset': 2.0,
+		'clip_hole_xoffset': 2.0 + (3.5 / 2),
 		'clip_hole_yoffset': 5.5,
 		'tractor_hole_diameter': 3.0,
-		'tractor_hole_xoffset': 12.5,
+		'tractor_hole_xoffset': 12.5 + (3.0 / 2),
 		'tractor_hole_yoffset': 5.5,
 		'stitches': 40,
 		'corner_offset': 0,
@@ -107,48 +127,28 @@ def calibrate():
 
 class Layout:
 
-	def __init__(self, machine_id, stitches, rows, horz_repeat, vert_repeat):
+	def __init__(self, machine_id, stitches, rows, horz_repeat, vert_repeat, is_blank):
 
-		# total width of the cut card
 		self.card_width = specs[machine_id]['card_width']
-
-		# number of overlapping blank rows at the top of the card
 		self.blank_rows = specs[machine_id]['blank_rows']
-
-		# height of one row on the card in mm
 		self.row_height = specs[machine_id]['row_height']
-
-		# width of one stitch on the card in mm
 		self.stitch_width = specs[machine_id]['stitch_width']
-
-		# diameter of a pattern hole in mm
 		self.pattern_hole_diameter = specs[machine_id]['pattern_hole_diameter']
-
-		# offset of the first pattern hole from the left edge of the card in mm
+		self.overlap_hole_diameter = specs[machine_id]['overlap_hole_diameter']
 		self.pattern_hole_xoffset = specs[machine_id]['pattern_hole_xoffset']
-
-		# diameter of a clip hole in mm
 		self.clip_hole_diameter = specs[machine_id]['clip_hole_diameter']
-
-		# offset of a clip hole from the left/right edge of the card in mm
 		self.clip_hole_xoffset = specs[machine_id]['clip_hole_xoffset']
-
-		# offset of a clip hole from the top/bottom edges of the card in mm
 		self.clip_hole_yoffset = specs[machine_id]['clip_hole_yoffset']
-
-		# diameter of a tractor hole in mm
 		self.tractor_hole_diameter = specs[machine_id]['tractor_hole_diameter']
-
-		# offset of a tractor hole from the left/right edge of the card in mm
 		self.tractor_hole_xoffset = specs[machine_id]['tractor_hole_xoffset']
-
-		# offset of a tractor hole from the top/bottom edge of the card in mm
 		self.tractor_hole_yoffset = specs[machine_id]['tractor_hole_yoffset']
-
 		self.corner_offset = specs[machine_id]['corner_offset']
 
 		self.card_stitches = stitches
 		self.card_rows = rows
+
+		if is_blank:
+			self.pattern_hole_diameter = .5
 
 		if self.card_rows > 200 or self.card_stitches > specs[machine_id]['stitches']:
 			raise ValueError(
@@ -163,7 +163,7 @@ class Layout:
 
 class PCGenerator:
 
-	def __init__(self, handler, data, machine_id, vert_repeat):
+	def __init__(self, handler, data, machine_id, vert_repeat, is_blank = False):
 
 		self.handler = handler
 		self.data = data.split()
@@ -172,7 +172,8 @@ class PCGenerator:
 			len(self.data[0]),
 			len(self.data),
 			specs[machine_id]['stitches'] / len(self.data[0]),
-			vert_repeat
+			vert_repeat,
+			is_blank
 		)
 
 	def generate(self):
@@ -202,13 +203,13 @@ class PCGenerator:
 			viewBox=(
 				'0 0 {0} {1}'.format(self.layout.card_width, self.layout.card_height)),
 			preserveAspectRatio='none')
-		
+
 		diagram.add(diagram.polygon(
 			points=self.get_card_shape(),
 			fill='white',
 			stroke='black',
 			stroke_width=.1))
-			
+
 		return diagram
 
 	def draw_pattern(self, diagram, lines, objects):
@@ -217,7 +218,7 @@ class PCGenerator:
 		yoffset = (self.layout.blank_rows * self.layout.row_height) + (self.layout.row_height / 2)
 		for row_repeat in range(self.layout.vert_repeat):
 			for rows in range(self.layout.card_rows):
-				xoffset = self.layout.pattern_hole_xoffset + (self.layout.pattern_hole_diameter / 2)
+				xoffset = self.layout.pattern_hole_xoffset
 				for stitch_repeat in range(self.layout.horz_repeat):
 					for stitches in range(self.layout.card_stitches):
 						if lines[rows][stitches].upper() == 'X':
@@ -235,13 +236,13 @@ class PCGenerator:
 		# blank rows at top
 		yoffset = self.layout.row_height / 2
 		for rows in range(self.layout.blank_rows):
-			xoffset = self.layout.pattern_hole_xoffset + (self.layout.pattern_hole_diameter / 2)
+			xoffset = self.layout.pattern_hole_xoffset
 			for stitch_repeat in range(self.layout.horz_repeat):
 				for stitches in range(self.layout.card_stitches):
 					objects.append(diagram.circle(
 						center=(xoffset, yoffset),
 						fill='white',
-						r = (self.layout.pattern_hole_diameter / 2),
+						r = (self.layout.overlap_hole_diameter / 2),
 						stroke='black',
 						stroke_width=.1))
 					xoffset += self.layout.stitch_width
@@ -250,13 +251,13 @@ class PCGenerator:
 		# blank rows at bottom
 		yoffset = (self.layout.card_height - (self.layout.row_height * self.layout.blank_rows)) + (self.layout.row_height / 2)
 		for rows in range(self.layout.blank_rows):
-			xoffset = self.layout.pattern_hole_xoffset + (self.layout.pattern_hole_diameter / 2)
+			xoffset = self.layout.pattern_hole_xoffset
 			for stitch_repeat in range(self.layout.horz_repeat):
 				for stitches in range(self.layout.card_stitches):
 					objects.append(diagram.circle(
 						center=(xoffset, yoffset),
 						fill='white',
-						r = (self.layout.pattern_hole_diameter / 2),
+						r = (self.layout.overlap_hole_diameter / 2),
 						stroke='black',
 						stroke_width=.1))
 					xoffset += self.layout.stitch_width
@@ -282,7 +283,7 @@ class PCGenerator:
 
 	def draw_side_holes(self, diagram, objects, xoffset, yoffset, diameter):
 
-		left_xoffset = xoffset + (diameter / 2)
+		left_xoffset = xoffset
 		right_xoffset = self.layout.card_width - left_xoffset
 
 		while yoffset < self.layout.card_height:
@@ -306,17 +307,21 @@ class PCGenerator:
 
 		corner_diameter =  self.layout.corner_offset + 1
 
-		#   a------------------b
-		#  p                    c
-		#  |                    |
-		#  o                    d
-		# n                      e
-		# |                      |
-		# m                      f
-		#  l                    g
-		#  |                    |
-		#  k                    h
-		#   j------------------i
+		#	   a..................b
+		#	  p                    c
+		#	  .                    .
+		#	  o                    d
+		#	 n                      e
+		#	 .                      .
+		#	 .                      .
+		#	 .                      .
+		#	 .                      .
+		#	 .                      .
+		#	 m                      f
+		#	  l                    g
+		#	  .                    .
+		#	  k                    h
+		#	   j..................i
 
 		a = (corner_diameter, 0)
 		b = (self.layout.card_width - corner_diameter, 0)
