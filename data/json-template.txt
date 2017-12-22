@@ -1,0 +1,19 @@
+{
+  "card_width": # total width of the cut card
+  "stitches": # stitches per row
+  "row_height": # height of one row on the card in mm
+  "stitch_width": # width of one stitch on the card in mm
+  "pattern_hole_diameter": # diameter of a pattern hole in mm
+  "pattern_hole_xoffset": # offset of the first pattern hole from the left edge of the card in mm
+  "pattern_hole_yoffset": # offset of the first pattern hole from the top edge of the card in mm
+  "clip_hole_diameter": # diameter of a clip hole in mm
+  "clip_hole_xoffset": # offset of a clip hole from the left/right edge of the card in mm
+  "clip_hole_yoffset": # offset of a clip hole from the top/bottom edges of the card in mm
+  "tractor_hole_diameter": # diameter of a tractor hole in mm
+  "tractor_hole_xoffset": # offset of a tractor hole from the left/right edge of the card in mm
+  "tractor_hole_yoffset": # offset of a tractor hole from the top/bottom edge of the card in mm
+  "overlapping_rows": # number of overlapping punched rows at the top/bottom of the card
+  "overlapping_row_xoffset": # offset of the first overlapping hole from the left edge of the card in mm
+  "overlapping_row_yoffset": # offset of the first overlapping hole from the top/bottom edges of the card in mm
+  "corner_offset": # offset of the card corners
+}
