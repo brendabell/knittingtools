@@ -26,7 +26,7 @@ def calibrate():
 
 class Layout:
 
-	def __init__(self, machine_id, stitches, rows, horz_repeat, vert_repeat, is_blank):
+	def __init__(self, machine_id, stitches, rows, horz_repeat, vert_repeat, is_blank, is_solid_fill):
 
 		global machine_config
 
@@ -47,6 +47,10 @@ class Layout:
 		self.overlapping_row_xoffset = machine_config['overlapping_row_xoffset']
 		self.overlapping_row_yoffset = machine_config['overlapping_row_yoffset']
 		self.corner_offset = machine_config['corner_offset']
+		if machine_config['force_solid_fill']:
+			self.solid_fill = True
+		else:
+			self.solid_fill = is_solid_fill
 
 		self.card_rows = rows
 
@@ -64,7 +68,7 @@ class Layout:
 
 class PCGenerator:
 
-	def __init__(self, handler, data, machine_id, vert_repeat, is_blank = False):
+	def __init__(self, handler, data, machine_id, vert_repeat, is_blank = False, is_solid_fill = False):
 
 		global machine_config
 
@@ -81,7 +85,8 @@ class PCGenerator:
 			len(self.data),
 			machine_config['stitches'] / len(self.data[0]),
 			vert_repeat,
-			is_blank)
+			is_blank,
+			is_solid_fill)
 
 	def generate(self):
 
@@ -131,6 +136,11 @@ class PCGenerator:
 
 	def draw_pattern(self, diagram, lines, objects):
 
+		if self.layout.solid_fill:
+			fill = 'red'
+		else:
+			fill = 'white'
+
 		# main body of card
 		yoffset = self.layout.pattern_hole_yoffset
 		for row_repeat in range(self.layout.vert_repeat):
@@ -141,7 +151,7 @@ class PCGenerator:
 						if lines[rows][stitches].upper() == 'X':
 							objects.append(diagram.circle(
 								center=(xoffset, yoffset),
-								fill='white',
+								fill=fill,
 								r = (self.layout.pattern_hole_diameter / 2),
 								stroke='black',
 								stroke_width=.1))

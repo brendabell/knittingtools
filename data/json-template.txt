@@ -16,4 +16,5 @@
   "overlapping_row_xoffset": # offset of the first overlapping hole from the left edge of the card in mm
   "overlapping_row_yoffset": # offset of the first overlapping hole from the top/bottom edges of the card in mm
   "corner_offset": # offset of the card corners
+  "force_solid_fill": # true if this card type should always generate filled holes
 }

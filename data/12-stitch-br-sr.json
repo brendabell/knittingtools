@@ -15,5 +15,6 @@
   "overlapping_rows": 2,
   "overlapping_row_xoffset": 24.25,
   "overlapping_row_yoffset": 2.5,
-  "corner_offset": 2.0
+  "corner_offset": 2.0,
+  "force_solid_fill": false
 }

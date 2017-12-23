@@ -65,6 +65,7 @@
 							<option value="40-stitch-jac-4_5">4.5mm Jac40</option>
 							<option value="40-stitch-jac-5_08">5.08mm Jac40 (5er engl.)</option>
 							<option value="40-stitch-jac-5_0">5mm Jac40 (5 metr.)</option>
+							<option value="60-stitch-ec1">60-stitch EC1 (template only)</option>
 						</select>
 				</td>
 				</tr>
@@ -81,6 +82,10 @@
 				<tr>
 					<td style="text-align:right">Generate blank card:</td>
 					<td><input type="checkbox" name="blank" value="blank"><small> (This feature is experimental.)<small></td>
+				</tr>
+				<tr>
+					<td style="text-align:right">Use solid fill:</td>
+					<td><input type="checkbox" name="fill" value="fill"><small> (This feature is experimental. See instructions.)<small></td>
 				</tr>
 				<tr>
 					<td style="text-align:right">Calibrate only:</td>
@@ -124,6 +129,8 @@
 		</pre>
 
 		<p>If <em>Generate blank card</em> is checked, the generator will ignore the file upload and produce a blank card that can be manually punched. The width and length of the card will be determined by the type of machine and number of repeats. For example, if you select a 12-stitch machine with a repeat of 40, the blank card will have 12 stitches and 40 unpunched rows.
+
+		<p>If <em>Use solid fill</em> is checked, the generator will draw the punched "holes" with a solid red fill. This will make it easier to "see" the holes if you're using the image as a template to manually draw or punch a card.
 
 		<p>The resulting SVG file can be imported into any application that understands SVG. You can also display the SVG in some browsers. Neither the text file nor resulting SVG will be saved on this site. Be sure to keep them in a safe location so they don't get lost.
 

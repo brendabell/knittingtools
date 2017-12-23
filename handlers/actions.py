@@ -48,6 +48,7 @@ def pcgenerator_post(handler, logger):
 
 		calibrate_only = query.get('test', [''])[0] == 'test'
 		is_blank = query.get('blank', [''])[0] == 'blank'
+		is_solid_fill = query.get('fill', [''])[0] == 'fill'
 
 		result = None
 		filename_template = None
@@ -75,7 +76,8 @@ def pcgenerator_post(handler, logger):
 				upfilecontent[0],
 				machine_type[0],
 				int(vert_repeat[0]),
-				is_blank)
+				is_blank,
+				is_solid_fill)
 			result = generator.generate()
 			filename_template = 'attachment; filename="punchcard-{}.{}"'
 
