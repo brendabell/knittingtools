@@ -21,7 +21,7 @@ def pcgenerator_get(handler, logger):
 		handler.wfile.write(f.read())
 
 		return
-			
+
 	except Exception:
 		exc_type, exc_value, exc_traceback = sys.exc_info()
 		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
@@ -47,6 +47,8 @@ def pcgenerator_post(handler, logger):
 			query=cgi.parse_multipart(handler.rfile, pdict)
 
 		calibrate_only = query.get('test', [''])[0] == 'test'
+		is_blank = query.get('blank', [''])[0] == 'blank'
+		is_solid_fill = query.get('fill', [''])[0] == 'fill'
 
 		result = None
 		filename_template = None
@@ -56,24 +58,28 @@ def pcgenerator_post(handler, logger):
 			result = calibrate()
 			filename_template = 'attachment; filename="calibrate-{}.{}"'
 		else:
-			upfilecontent = query.get('upfile')
-			if len(upfilecontent[0]) > 4000:
-				handler.send_response(302)
-				handler.send_header('Content-type', 'text/html')
-				handler.end_headers()
-				handler.wfile.write("Sorry. Your file cannot exceed 2500 bytes!")
-			else:
-				machine_type = query.get('machine')
-				vert_repeat = query.get('vert')
-				convert_to_png = query.get('png', [''])[0] == 'png'
+			upfilecontent = ['x']
+			if not is_blank:
+				upfilecontent = query.get('upfile')
+				if len(upfilecontent[0]) > 4000:
+					handler.send_response(302)
+					handler.send_header('Content-type', 'text/html')
+					handler.end_headers()
+					handler.wfile.write("Sorry. Your file cannot exceed 2500 bytes!")
+					return
+			machine_type = query.get('machine')
+			vert_repeat = query.get('vert')
+			convert_to_png = query.get('png', [''])[0] == 'png'
 
-				generator = PCGenerator(
-					handler,
-					upfilecontent[0],
-					machine_type[0],
-					int(vert_repeat[0]))
-				result = generator.generate()
-				filename_template = 'attachment; filename="punchcard-{}.{}"'
+			generator = PCGenerator(
+				handler,
+				upfilecontent[0],
+				machine_type[0],
+				int(vert_repeat[0]),
+				is_blank,
+				is_solid_fill)
+			result = generator.generate()
+			filename_template = 'attachment; filename="punchcard-{}.{}"'
 
 		handler.send_response(200)
 
@@ -138,7 +144,7 @@ def calculator_get(handler, logger):
 		handler.wfile.write(f.read())
 
 		return
-			
+
 	except Exception:
 		exc_type, exc_value, exc_traceback = sys.exc_info()
 		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
@@ -168,7 +174,7 @@ def index_get(handler, logger):
 		handler.wfile.write(f.read())
 
 		return
-			
+
 	except Exception:
 		exc_type, exc_value, exc_traceback = sys.exc_info()
 		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))

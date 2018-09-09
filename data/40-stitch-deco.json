@@ -1,0 +1,20 @@
+{
+  "card_width": 243.0,
+  "stitches": 40,
+  "row_height": 5.25,
+  "stitch_width": 5.0,
+  "pattern_hole_diameter": 3.7,
+  "pattern_hole_xoffset": 24.0,
+  "pattern_hole_yoffset": 18.375,
+  "clip_hole_diameter": 3.5,
+  "clip_hole_xoffset": 3.75,
+  "clip_hole_yoffset": 5.5,
+  "tractor_hole_diameter": 3.0,
+  "tractor_hole_xoffset": 14.0,
+  "tractor_hole_yoffset": 5.5,
+  "overlapping_rows": 3,
+  "overlapping_row_xoffset": 24.0,
+  "overlapping_row_yoffset": 2.625,
+  "corner_offset": 0.0,
+  "force_solid_fill": false
+}
