@@ -148,13 +148,17 @@ class PCGenerator:
 				xoffset = self.layout.pattern_hole_xoffset
 				for stitch_repeat in range(self.layout.horz_repeat):
 					for stitches in range(self.layout.card_stitches):
-						if lines[rows][stitches].upper() == 'X':
-							objects.append(diagram.circle(
-								center=(xoffset, yoffset),
-								fill=fill,
-								r = (self.layout.pattern_hole_diameter / 2),
-								stroke='black',
-								stroke_width=.1))
+						try:
+							if lines[rows][stitches].upper() == 'X':
+								objects.append(diagram.circle(
+									center=(xoffset, yoffset),
+									fill=fill,
+									r = (self.layout.pattern_hole_diameter / 2),
+									stroke='black',
+									stroke_width=.1))
+						except IndexError as error:
+							msg = "***** Bad input character row {} stitch {} *****"
+							raise RuntimeError(msg.format(rows+1, stitches+1))
 						xoffset += self.layout.stitch_width
 				yoffset += self.layout.row_height
 
