@@ -186,7 +186,6 @@ class PCGenerator:
 			yoffset += self.layout.row_height
 
 		# overlapping rows at bottom
-		# yoffset = (self.layout.card_height - (self.layout.row_height * self.layout.overlapping_rows)) + (self.layout.row_height / 2)
 		yoffset = self.layout.card_height - self.layout.overlapping_row_yoffset
 		for rows in range(self.layout.overlapping_rows):
 			xoffset = self.layout.overlapping_row_xoffset

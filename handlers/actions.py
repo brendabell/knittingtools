@@ -79,6 +79,7 @@ def pcgenerator_post(handler, logger):
 				is_blank,
 				is_solid_fill)
 			result = generator.generate()
+			filename_template = 'attachment; filename="punchcard-{}.{}"'
 
 		handler.send_response(200)
 
@@ -116,11 +117,8 @@ def pcgenerator_post(handler, logger):
 		stack = traceback.extract_stack()
 		for i in stack:
 			handler.wfile.write(
-				# repr(traceback.format_exception(exc_type, exc_value,exc_traceback)).replace('\\n','<br>'))
-				# repr(traceback.format_stack()).replace('\\n','<br>'))
 				i)
 			handler.wfile.write('<br>')
-		# handler.wfile.write(e)
 
 def calculator_get(handler, logger):
 
