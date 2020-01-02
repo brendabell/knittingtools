@@ -109,8 +109,8 @@ def pcgenerator_post(handler, logger):
 			handler.wfile.write(i)
 		handler.wfile.write(
 			"<p><em>If you need assistance...</em><br><br>"
-			"* Copy the entire contents of this page to the clipboard (Ctrl-A Ctrl-C on Windows or Cmd-A Cmd-C on Mac).<br>"
-			"* Paste from the clibboard (Ctrl-V on Windows or Cmd-V on Max) into a private message to"
+			"* Copy the entire contents of this page to the clipboard (Ctrl-A+Ctrl-C on Windows or Cmd-A+Cmd-C on Mac).<br>"
+			"* Paste from the clibboard (Ctrl-V on Windows or Cmd-V on Mac) into a private message to"
 			" <a href='http://www.ravelry.com/people/beebell'>beebell on Ravelry</a>.<br>"
 			"* Please include the pattern you uploaded to help diagnose the issue.<br>")
 		handler.wfile.write("<p>Stack trace:<br><br>")
