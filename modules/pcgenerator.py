@@ -30,6 +30,7 @@ class Layout:
 
 		global machine_config
 
+		self.machine_id = machine_id
 		self.card_width = machine_config['card_width']
 		self.card_stitches = stitches
 		self.row_height = machine_config['row_height']
@@ -47,6 +48,7 @@ class Layout:
 		self.overlapping_row_xoffset = machine_config['overlapping_row_xoffset']
 		self.overlapping_row_yoffset = machine_config['overlapping_row_yoffset']
 		self.corner_offset = machine_config['corner_offset']
+		self.half_hole_at_bottom = machine_config['half_hole_at_bottom']
 		if machine_config['force_solid_fill']:
 			self.solid_fill = True
 		else:
@@ -157,7 +159,11 @@ class PCGenerator:
 									stroke='black',
 									stroke_width=.1))
 						except IndexError as error:
-							msg = "***** Bad input character row {} stitch {} *****"
+							msg = (
+								"<em>Encountered bad input character row {} stitch {}</em><br><br>"
+								"* Make sure you don't have a space or blank where you intended to enter a dash or X.<br>"
+								"* Also look for a line that's too short... i.e., a line that only has 23 pattern "
+								"characters for a 24-stitch pattern.<br>")
 							raise RuntimeError(msg.format(rows+1, stitches+1))
 						xoffset += self.layout.stitch_width
 				yoffset += self.layout.row_height
@@ -218,7 +224,10 @@ class PCGenerator:
 		left_xoffset = xoffset
 		right_xoffset = self.layout.card_width - left_xoffset
 
-		while yoffset < self.layout.card_height:
+		while yoffset <= self.layout.card_height:
+			if not self.layout.half_hole_at_bottom:
+				break
+
 			# holes on left
 			objects.append(diagram.circle(
 				center=(left_xoffset, yoffset),
