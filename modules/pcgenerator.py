@@ -224,9 +224,6 @@ class PCGenerator:
 		right_xoffset = self.layout.card_width - left_xoffset
 
 		while yoffset <= self.layout.card_height:
-			if not self.layout.half_hole_at_bottom:
-				break
-
 			# holes on left
 			objects.append(diagram.circle(
 				center=(left_xoffset, yoffset),
@@ -242,6 +239,10 @@ class PCGenerator:
 				stroke='black',
 				stroke_width=.1))
 			yoffset += self.layout.row_height
+
+			if (yoffset >= self.layout.card_height and
+					not self.layout.half_hole_at_bottom):
+				break
 
 	def get_card_shape(self):
 
