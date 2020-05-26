@@ -11,10 +11,11 @@
   "clip_hole_yoffset": 0.0,
   "tractor_hole_diameter": 2.5,
   "tractor_hole_xoffset": 4.5,
-  "tractor_hole_yoffset": 5.25,
+  "tractor_hole_yoffset": 0.0,
   "overlapping_rows": 0,
   "overlapping_row_xoffset": 0.0,
   "overlapping_row_yoffset": 0.0,
   "corner_offset": 0.0,
-  "force_solid_fill": false
+  "force_solid_fill": false,
+  "half_hole_at_bottom": true
 }
