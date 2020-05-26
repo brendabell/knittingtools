@@ -8,6 +8,29 @@ import traceback
 from modules.pcgenerator import PCGenerator
 from modules.pcgenerator import calibrate
 
+def pcgenerator_head(handler, logger):
+
+        try:
+		handler.send_response(200)
+		handler.send_header('Content-type', 'text/html')
+		handler.end_headers()
+
+                return
+
+	except Exception:
+		exc_type, exc_value, exc_traceback = sys.exc_info()
+		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
+
+		handler.wfile.write(
+			"<h1>Aw, snap! We seem to have a problem.</h1><p><b>")
+		handler.wfile.write(
+			repr(traceback.format_exception(exc_type, exc_value,exc_traceback)))
+		handler.wfile.write(
+			"</b><p>Please report this error via private message to "
+			"<a href='http://www.ravelry.com/people/beebell'>beebell on Ravelry</a>. "
+			"It will be helpful if you include the pattern you uploaded to help me "
+			"diagnose the issue.")
+
 def pcgenerator_get(handler, logger):
 
 	f = open("{}/../templates/{}".format(
@@ -120,6 +143,29 @@ def pcgenerator_post(handler, logger):
 				i)
 			handler.wfile.write('<br>')
 
+def calculator_head(handler, logger):
+
+	try:
+		handler.send_response(200)
+		handler.send_header('Content-type', 'text/html')
+		handler.end_headers()
+
+		return
+
+	except Exception:
+		exc_type, exc_value, exc_traceback = sys.exc_info()
+		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
+
+		handler.wfile.write(
+			"<h1>Aw, snap! We seem to have a problem.</h1><p><b>")
+		handler.wfile.write(
+			repr(traceback.format_exception(exc_type, exc_value,exc_traceback)))
+		handler.wfile.write(
+			"</b><p>Please report this error via private message to "
+			"<a href='http://www.ravelry.com/people/beebell'>beebell on Ravelry</a>. "
+			"It will be helpful if you include the pattern you uploaded to help me "
+			"diagnose the issue.")
+
 def calculator_get(handler, logger):
 
 	f = open("{}/../templates/{}".format(
@@ -151,6 +197,29 @@ def calculator_get(handler, logger):
 	finally:
 		f.close()
 
+def index_head(handler, logger):
+	try:
+		handler.send_response(200)
+		handler.send_header('Content-type', 'text/html')
+		handler.send_header('Content-Security-Policy', "frame-ancestors 'self' *.theotherbell.com")
+		handler.end_headers()
+
+		return
+
+	except Exception:
+		exc_type, exc_value, exc_traceback = sys.exc_info()
+		handler.log_error("%s", traceback.format_exception(exc_type, exc_value,exc_traceback))
+
+		handler.wfile.write(
+			"<h1>Aw, snap! We seem to have a problem.</h1><p><b>")
+		handler.wfile.write(
+			repr(traceback.format_exception(exc_type, exc_value,exc_traceback)))
+		handler.wfile.write(
+			"</b><p>Please report this error via private message to "
+			"<a href='http://www.ravelry.com/people/beebell'>beebell on Ravelry</a>. "
+			"It will be helpful if you include the pattern you uploaded to help me "
+			"diagnose the issue.")
+
 def index_get(handler, logger):
 	f = open("{}/../templates/{}".format(
 		os.path.dirname(os.path.realpath(__file__)),
@@ -159,6 +228,7 @@ def index_get(handler, logger):
 	try:
 		handler.send_response(200)
 		handler.send_header('Content-type', 'text/html')
+		handler.send_header('Content-Security-Policy', "frame-ancestors 'self' *.theotherbell.com")
 		handler.end_headers()
 		handler.wfile.write(f.read())
 
