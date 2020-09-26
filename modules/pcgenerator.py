@@ -20,6 +20,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import svgwrite
 import json
+import os
 
 
 machine_config = None
@@ -95,7 +96,8 @@ class PCGenerator:
 		global machine_config
 
 		self.handler = handler
-		with open("data/{}.json".format(machine_id)) as json_config:
+                data_dir = os.path.join(os.path.dirname(__file__), '../data/')
+		with open("{}/{}.json".format(data_dir, machine_id)) as json_config:
 			machine_config = json.loads(json_config.read())
 		if is_blank:
 			self.data = ['x' * machine_config['stitches']]

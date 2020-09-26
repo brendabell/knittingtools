@@ -69,18 +69,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 				</tr>
 				<tr>
 					<td>Centimeters &amp; Inches</td>
-					<td><input type="number" id="cm" oninput="inch.value = Math.round(cm.value * 0.393701 * 1000) / 1000;"><sup> a</sup></td>
-					<td><input type="number" id="inch" oninput="cm.value = Math.round(inch.value * 2.54 * 1000) / 1000;"><sup> b</sup></td>
+					<td><input type="number" id="cm" oninput="inch.value = Math.round(cm.value * 0.393701 * 1000) / 1000;"><sup>&nbsp;a</sup></td>
+					<td><input type="number" id="inch" oninput="cm.value = Math.round(inch.value * 2.54 * 1000) / 1000;"><sup>&nbsp;b</sup></td>
 				</tr>
 				<tr>
 					<td>Meters &amp; Yards</td>
-					<td><input type="number" id="m" oninput="yd.value = Math.round(m.value * 1.093613 * 1000) / 1000;"><sup> c</sup></td>
-					<td><input type="number" id="yd" oninput="m.value = Math.round(yd.value * 0.9144 * 1000) / 1000;"><sup> d</sup></td>
+					<td><input type="number" id="m" oninput="yd.value = Math.round(m.value * 1.093613 * 1000) / 1000;"><sup>&nbsp;c</sup></td>
+					<td><input type="number" id="yd" oninput="m.value = Math.round(yd.value * 0.9144 * 1000) / 1000;"><sup>&nbsp;d</sup></td>
 				</tr>
 				<tr>
 					<td>Grams &amp; Ounces</td>
-					<td><input type="number" id="gm" oninput="oz.value = Math.round(gm.value * 0.035274 * 1000) / 1000;"><sup> e</sup></td>
-					<td><input type="number" id="oz" oninput="gm.value = Math.round(oz.value * 28.349523 * 1000) / 1000;"><sup> f</sup></td>
+					<td><input type="number" id="gm" oninput="oz.value = Math.round(gm.value * 0.035274 * 1000) / 1000;"><sup>&nbsp;e</sup></td>
+					<td><input type="number" id="oz" oninput="gm.value = Math.round(oz.value * 28.349523 * 1000) / 1000;"><sup>&nbsp;f</sup></td>
 				</tr>
 			</table>
 		</form>
@@ -104,7 +104,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 					<th style="width:400px">Description</th>
 					<th style="width:150px">Value</th>
 				<tr>
-					<td>Rows/stitches per 10cm/4" on the pattern<sup> a</sup></td>
+					<td>Rows/stitches per 10cm/4" on the pattern<sup>&nbsp;a</sup></td>
 					<td><input
 						type="number"
 						id="a"
@@ -115,7 +115,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 						oninput="d.value = Math.round((b.value / a.value) * c.value)"></td>
 				</tr>
 				<tr>
-					<td>Pattern rows/stitches<sup> b</sup></td>
+					<td>Pattern rows/stitches<sup>&nbsp;b</sup></td>
 					<td><input
 						type="number"
 						id="b"
@@ -126,7 +126,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 						oninput="d.value = Math.round((b.value / a.value) * c.value)"></td>
 				</tr>
 				<tr>
-					<td>Rows/stitches per 10cm/4" on your knitting machine<sup> c</sup></td>
+					<td>Rows/stitches per 10cm/4" on your knitting machine<sup>&nbsp;c</sup></td>
 					<td><input
 						type="number"
 						id="c"
@@ -137,7 +137,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 						oninput="d.value = Math.round((b.value / a.value) * c.value)"></td>
 				</tr>
 				<tr>
-					<td>Equivalent rows/stitches on your knitting machine<sup> d</sup></td>
+					<td>Equivalent rows/stitches on your knitting machine<sup>&nbsp;d</sup></td>
 					<td><output
 						name="d"
 						for="a b c"
@@ -161,7 +161,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 					<th style="width:150px">Imperial (in)</th>
 				</tr>
 				<tr>
-					<td>Rows/stitches per 10cm/4"<sup> a</sup></td>
+					<td>Rows/stitches per 10cm/4"<sup>&nbsp;a</sup></td>
 					<td colspan="2"><input
 						type="number"
 						id="a"
@@ -170,10 +170,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 						max="100.0"
 						step="0.1"
 						value="1.0"
-						oninput="c1.value = Math.round(a.value / 10 * b1.value); c2.value = Math.round(a.value / 4 * b1.value);"></td>
+						oninput="c1.value = Math.round(a.value / 10 * b1.value); c2.value = Math.round(a.value / 4 * b2.value);"></td>
 				</tr>
 				<tr>
-					<td>desired width/length<sup> b</sup></td>
+					<td>Desired width/length<sup>&nbsp;b</sup></td>
 					<td><input
 						type="number"
 						id="b1"
@@ -181,7 +181,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 						min="1.0"
 						max="100.0"
 						step="0.1"
-						value="1.0"
+						value="2.54"
 						oninput="b2.value = Math.round(b1.value * 0.393701 * 1000) / 1000; c1.value = Math.round(a.value / 10 * b1.value); c2.value = Math.round(a.value / 4 * b2.value);"></td>
 					<td><input
 						type="number"
@@ -194,7 +194,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 						oninput="b1.value= Math.round(b2.value * 2.54 * 1000) / 1000; c1.value = Math.round(a.value / 10 * b1.value); c2.value = Math.round(a.value / 4 * b2.value);"></td>
 				</tr>
 				<tr>
-					<td># stitches to cast on or rows to knit<sup> c</sup></td>
+					<td># stitches to cast on or rows to knit<sup>&nbsp;c</sup></td>
 					<td><output
 						name="c1"
 						for="a b1"
@@ -220,7 +220,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 		<p style="margin-left: 40px">For example, if the pattern instructs you to cast on 80 stitches for a size medium but your gauge requires you to cast on 90 stitches to achieve the same width, look at the pattern to see if the next larger size specifies a cast on that's closer to 90 stitches. Knitting a larger size at a smaller gauge (or smaller size at a larger gauge) may produce the same result.
 
 		<b><h3>Bugs & Disclaimers</h3></b>
-		<p>If you have questions or feedback, please contact <a href="http://www.ravelry.com/people/beebell">beebell on Ravelry</a> via private message or log at issue on <a href="https://github.com/brendabell/knittingtools/issues">GitHub</a>.</p>
+		<p>If you have questions or feedback, please contact <a href="http://www.ravelry.com/people/beebell">beebell on Ravelry</a> via private message, send me an email via <a href="https://brendaabell.com/contact-me/" target="_blank">my blog</a>  or log at issue on <a href="https://github.com/brendabell/knittingtools/issues">GitHub</a>.</p>
 
 	</body>
 </html>
