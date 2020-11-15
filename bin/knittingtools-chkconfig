@@ -9,8 +9,8 @@ SERVICE=knittingtools
 . /etc/init.d/functions
 
 lockfile=/var/lock/${SERVICE}.lock
-procname=/path/to/knittingtools/venv/bin/python
-scriptname=/path/to/knittingtools/server.py
+procname=/home/www/knittingtools/venv/bin/python
+scriptname=/home/www/knittingtools/server.py
 pidfile=/var/run/${SERVICE}.pid
 
 RETVAL=0
